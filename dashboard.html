@@ -166,7 +166,7 @@ function doLogout() {
 }
 
 function parseRideDate(b) {
-  var s = b['Ride Date'] || b['Date'] || '';
+  var s = b['Ride Date'] || b['Booked on'] || '';
   if (!s || s === 'Not specified') return null;
   var d = new Date(s);
   if (!isNaN(d)) return d;
@@ -271,14 +271,14 @@ function badgeText(b) {
 }
 
 function card(b, cls) {
-  var name    = b['Name']||'Unknown';
-  var email   = b['Email']||'-';
-  var phone   = b['Phone']||'-';
-  var service = b['Service']||'-';
-  var pickup  = b['Pickup Time']||'-';
-  var dropoff = b['Dropoff Time']||'-';
-  var msg     = b['Message']||'';
-  var rideDate= b['Ride Date']||b['Date']||'-';
+  var name    = b['Name']||b['name']||'Unknown';
+  var email   = b['Email']||b['email']||'-';
+  var phone   = b['Phone']||b['phone']||'-';
+  var service = b['Service']||b['service']||'-';
+  var pickup  = b['Pickup Time']||b['pickupTime']||'-';
+  var dropoff = b['Dropoff Time']||b['dropoffTime']||'-';
+  var msg     = b['Message']||b['message']||'';
+  var rideDate= b['Ride Date']||b['ride_date']||'-';
   var bc      = badgeCls(classify(b));
 
   return '<div class="card ' + cls + '">' +

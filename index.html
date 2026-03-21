@@ -676,7 +676,7 @@
       };
       // Save to SheetDB (Google Sheets)
       var sheetRow = {};
-      sheetRow['Date'] = new Date().toLocaleString();
+      sheetRow['Booked on'] = new Date().toLocaleString();
       sheetRow['Ride Date'] = date || 'Not specified';
       sheetRow['Name'] = bookingData.name;
       sheetRow['Email'] = bookingData.email;
