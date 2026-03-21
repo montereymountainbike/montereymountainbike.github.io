@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<title>MMB Dashboard</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f0f4f0;min-height:100vh;}
+
+/* LOGIN */
+#login-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:30px;background:#1a3a2a;}
+.login-logo{font-size:48px;margin-bottom:10px;}
+.login-title{color:#c8a84b;font-size:22px;font-weight:700;margin-bottom:4px;text-align:center;}
+.login-sub{color:#7a9e8a;font-size:13px;margin-bottom:32px;text-align:center;}
+.login-box{background:white;border-radius:16px;padding:24px;width:100%;max-width:340px;}
+.login-box label{font-size:12px;color:#888;text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:6px;}
+.login-box input{width:100%;padding:12px 16px;border:1.5px solid #e0e0e0;border-radius:10px;font-size:15px;margin-bottom:16px;outline:none;}
+.login-box input:focus{border-color:#1a3a2a;}
+.login-btn{width:100%;padding:14px;background:#1a3a2a;color:#c8a84b;border:none;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;letter-spacing:1px;}
+.login-err{color:#e74c3c;font-size:12px;text-align:center;margin-top:8px;display:none;}
+
+/* DASHBOARD */
+#dashboard{display:none;}
+.topbar{background:#1a3a2a;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;}
+.topbar-title{color:white;font-size:16px;font-weight:600;}
+.topbar-right{display:flex;gap:8px;align-items:center;}
+.refresh-btn{background:#c8a84b;color:#1a3a2a;border:none;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;}
+.logout-btn{background:transparent;color:#7a9e8a;border:1px solid #7a9e8a;padding:6px 12px;border-radius:20px;font-size:12px;cursor:pointer;}
+
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:12px;}
+.stat{background:white;border-radius:12px;padding:10px 6px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,0.07);}
+.stat .n{font-size:24px;font-weight:700;color:#1a3a2a;}
+.stat .l{font-size:9px;color:#999;text-transform:uppercase;letter-spacing:0.5px;margin-top:2px;}
+.stat.s-today .n{color:#e67e22;}
+.stat.s-tmr .n{color:#2e7d52;}
+.stat.s-week .n{color:#2980b9;}
+
+/* TABS */
+.tabs{display:flex;gap:6px;padding:0 12px 10px;overflow-x:auto;}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{padding:7px 16px;border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;border:none;white-space:nowrap;background:#e8ede8;color:#555;flex-shrink:0;}
+.tab.active{background:#1a3a2a;color:#c8a84b;}
+
+/* SECTION */
+.section{padding:0 12px 8px;}
+.sec-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#999;margin-bottom:8px;padding:4px 0;display:flex;align-items:center;gap:8px;}
+.sec-label .cnt{background:#1a3a2a;color:#c8a84b;border-radius:20px;padding:1px 8px;font-size:10px;}
+.sec-label .cnt.orange{background:#e67e22;color:white;}
+.sec-label .cnt.green{background:#2e7d52;color:white;}
+.sec-label .cnt.blue{background:#2980b9;color:white;}
+.sec-label .cnt.gray{background:#aaa;color:white;}
+
+/* CARD */
+.card{background:white;border-radius:14px;padding:14px;margin-bottom:8px;box-shadow:0 1px 4px rgba(0,0,0,0.07);border-left:4px solid #ddd;position:relative;}
+.card.c-today{border-left-color:#e67e22;}
+.card.c-tmr{border-left-color:#2e7d52;}
+.card.c-week{border-left-color:#2980b9;}
+.card.c-future{border-left-color:#8e44ad;}
+.card.c-past{border-left-color:#bbb;opacity:0.75;}
+.card.c-new{border-left-color:#c8a84b;}
+
+.card-row1{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+.cname{font-size:15px;font-weight:600;color:#1a3a2a;}
+.cdate-badge{font-size:10px;padding:3px 10px;border-radius:20px;font-weight:600;}
+.cdate-badge.today{background:#fff3e0;color:#e67e22;}
+.cdate-badge.tomorrow{background:#e8f5e9;color:#2e7d52;}
+.cdate-badge.week{background:#e3f2fd;color:#2980b9;}
+.cdate-badge.future{background:#f3e5f5;color:#8e44ad;}
+.cdate-badge.past{background:#f5f5f5;color:#999;}
+.cdate-badge.new{background:#fff8e8;color:#c8a84b;}
+
+.card-row2{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:8px;}
+.ci{font-size:12px;color:#666;}
+.ci b{color:#1a3a2a;}
+.cservice{display:inline-block;background:#e8f0e4;color:#1a3a2a;font-size:11px;padding:3px 10px;border-radius:20px;font-weight:600;margin-bottom:4px;}
+.ctime{font-size:12px;color:#c8a84b;font-weight:600;}
+.cmsg{font-size:11px;color:#999;font-style:italic;margin-top:4px;}
+
+.empty{text-align:center;padding:32px 20px;color:#bbb;}
+.empty-icon{font-size:36px;margin-bottom:8px;}
+.empty p{font-size:13px;}
+
+.loading{text-align:center;padding:50px 20px;}
+.spin{width:32px;height:32px;border:3px solid #e0e0e0;border-top-color:#1a3a2a;border-radius:50%;animation:spin 0.7s linear infinite;margin:0 auto 12px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.updated{text-align:center;font-size:11px;color:#aaa;padding:8px;margin-bottom:60px;}
+
+/* BOTTOM NAV */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:white;border-top:1px solid #eee;display:flex;padding:8px 0 12px;}
+.bnav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;border:none;background:transparent;cursor:pointer;font-size:9px;color:#aaa;font-weight:500;text-transform:uppercase;letter-spacing:0.5px;}
+.bnav-btn .icon{font-size:20px;}
+.bnav-btn.active{color:#1a3a2a;}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-logo">🚲</div>
+  <div class="login-title">Monterey Mountain Bike</div>
+  <div class="login-sub">Bookings Dashboard</div>
+  <div class="login-box">
+    <label>Password</label>
+    <input type="password" id="pwd-input" placeholder="Enter password" onkeydown="if(event.key==='Enter')doLogin()"/>
+    <button class="login-btn" onclick="doLogin()">SIGN IN</button>
+    <div class="login-err" id="login-err">Wrong password. Try again.</div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard">
+  <div class="topbar">
+    <div class="topbar-title">🚲 Bookings</div>
+    <div class="topbar-right">
+      <button class="refresh-btn" onclick="loadData()">↻</button>
+      <button class="logout-btn" onclick="doLogout()">Logout</button>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat s-today"><div class="n" id="s1">-</div><div class="l">Today</div></div>
+    <div class="stat s-tmr"><div class="n" id="s2">-</div><div class="l">Tomorrow</div></div>
+    <div class="stat s-week"><div class="n" id="s3">-</div><div class="l">This Week</div></div>
+    <div class="stat"><div class="n" id="s4">-</div><div class="l">Total</div></div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="setTab('all',this)">All</button>
+    <button class="tab" onclick="setTab('today',this)">Today</button>
+    <button class="tab" onclick="setTab('tomorrow',this)">Tomorrow</button>
+    <button class="tab" onclick="setTab('week',this)">This Week</button>
+    <button class="tab" onclick="setTab('future',this)">Future</button>
+    <button class="tab" onclick="setTab('past',this)">Past</button>
+  </div>
+
+  <div id="content">
+    <div class="loading"><div class="spin"></div>Loading bookings...</div>
+  </div>
+  <div class="updated" id="updated-time"></div>
+</div>
+
+<script>
+const PASS = 'mmb2026';
+const API  = 'https://sheetdb.io/api/v1/5vp0mvc7l9ke9?sheet=Sheet1';
+let allData = [];
+let curTab  = 'all';
+
+function doLogin() {
+  var p = document.getElementById('pwd-input').value;
+  if (p === PASS) {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+    loadData();
+  } else {
+    document.getElementById('login-err').style.display = 'block';
+    document.getElementById('pwd-input').value = '';
+  }
+}
+
+function doLogout() {
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('dashboard').style.display = 'none';
+  document.getElementById('pwd-input').value = '';
+}
+
+function parseRideDate(b) {
+  var s = b['Ride Date'] || b['Date'] || '';
+  if (!s || s === 'Not specified') return null;
+  var d = new Date(s);
+  if (!isNaN(d)) return d;
+  var p = s.split('/');
+  if (p.length >= 3) return new Date(p[2].split(' ')[0], p[0]-1, p[1]);
+  return null;
+}
+
+function startOfDay(d) { var x=new Date(d); x.setHours(0,0,0,0); return x; }
+
+function classify(b) {
+  var d = parseRideDate(b);
+  if (!d) return 'new';
+  var now = startOfDay(new Date());
+  var sd  = startOfDay(d);
+  var diff = Math.round((sd - now) / 86400000);
+  if (diff === 0) return 'today';
+  if (diff === 1) return 'tomorrow';
+  if (diff > 1 && diff <= 7) return 'week';
+  if (diff > 7) return 'future';
+  return 'past';
+}
+
+function loadData() {
+  document.getElementById('content').innerHTML = '<div class="loading"><div class="spin"></div>Loading...</div>';
+  fetch(API)
+    .then(r => r.json())
+    .then(data => {
+      allData = Array.isArray(data) ? data : [];
+      render(curTab);
+      document.getElementById('updated-time').textContent = 'Last updated: ' + new Date().toLocaleTimeString();
+      // stats
+      var counts = {today:0,tomorrow:0,week:0};
+      allData.forEach(b => {
+        var c = classify(b);
+        if (c==='today') counts.today++;
+        if (c==='tomorrow') counts.tomorrow++;
+        if (c==='week') counts.week++;
+      });
+      document.getElementById('s1').textContent = counts.today;
+      document.getElementById('s2').textContent = counts.tomorrow;
+      document.getElementById('s3').textContent = counts.week;
+      document.getElementById('s4').textContent = allData.length;
+    })
+    .catch(() => {
+      document.getElementById('content').innerHTML = '<div class="empty"><div class="empty-icon">⚠️</div><p>Could not load. Check connection.</p></div>';
+    });
+}
+
+function setTab(tab, btn) {
+  curTab = tab;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  render(tab);
+}
+
+function render(tab) {
+  var groups = {today:[],tomorrow:[],week:[],future:[],past:[],new:[]};
+  allData.forEach(b => { var c=classify(b); groups[c].push(b); });
+
+  // sort each group by ride date
+  ['today','tomorrow','week','future'].forEach(g => {
+    groups[g].sort((a,b) => {
+      var da = parseRideDate(a), db = parseRideDate(b);
+      return (da||0) - (db||0);
+    });
+  });
+
+  var html = '';
+
+  function section(title, cls, cntCls, items, cardCls) {
+    if (!items.length) return '';
+    var s = '<div class="section"><div class="sec-label">' + title + ' <span class="cnt ' + cntCls + '">' + items.length + '</span></div>';
+    items.forEach(b => s += card(b, cardCls));
+    return s + '</div>';
+  }
+
+  if (tab==='all' || tab==='today')    html += section('Today',     'today',   'orange', groups.today,    'c-today');
+  if (tab==='all' || tab==='tomorrow') html += section('Tomorrow',  'tmr',     'green',  groups.tomorrow, 'c-tmr');
+  if (tab==='all' || tab==='week')     html += section('This Week', 'week',    'blue',   groups.week,     'c-week');
+  if (tab==='all' || tab==='future')   html += section('Future',    'future',  '',       groups.future,   'c-future');
+  if (tab==='all')                     html += section('New (no date set)', 'new', '', groups.new, 'c-new');
+  if (tab==='all' || tab==='past')     html += section('Past',      'past',    'gray',   groups.past,     'c-past');
+
+  if (!html) html = '<div class="empty"><div class="empty-icon">📋</div><p>No bookings here</p></div>';
+  document.getElementById('content').innerHTML = html;
+}
+
+function badgeCls(c) {
+  return {today:'today',tomorrow:'tomorrow',week:'week',future:'future',past:'past',new:'new'}[c]||'new';
+}
+function badgeText(b) {
+  var c = classify(b);
+  var d = parseRideDate(b);
+  if (c==='today')    return '🔥 Today';
+  if (c==='tomorrow') return '📅 Tomorrow';
+  if (c==='week')     return '📅 This Week';
+  if (c==='past')     return '✓ Past';
+  if (c==='new')      return '🆕 New';
+  if (d) return '📅 ' + d.toLocaleDateString('en-US',{month:'short',day:'numeric'});
+  return '📅 Future';
+}
+
+function card(b, cls) {
+  var name    = b['Name']||'Unknown';
+  var email   = b['Email']||'-';
+  var phone   = b['Phone']||'-';
+  var service = b['Service']||'-';
+  var pickup  = b['Pickup Time']||'-';
+  var dropoff = b['Dropoff Time']||'-';
+  var msg     = b['Message']||'';
+  var rideDate= b['Ride Date']||b['Date']||'-';
+  var bc      = badgeCls(classify(b));
+
+  return '<div class="card ' + cls + '">' +
+    '<div class="card-row1">' +
+      '<div class="cname">' + name + '</div>' +
+      '<div class="cdate-badge ' + bc + '">' + badgeText(b) + '</div>' +
+    '</div>' +
+    '<div class="card-row2">' +
+      '<div class="ci">📞 <b>' + phone + '</b></div>' +
+      '<div class="ci">✉️ <b style="font-size:10px">' + email + '</b></div>' +
+    '</div>' +
+    '<span class="cservice">' + service + '</span>' +
+    '<div class="ctime">🕐 ' + pickup + ' → ' + dropoff + '</div>' +
+    (msg ? '<div class="cmsg">"' + msg + '"</div>' : '') +
+  '</div>';
+}
+
+// auto-refresh every 2 mins
+setInterval(() => { if(document.getElementById('dashboard').style.display!=='none') loadData(); }, 120000);
+</script>
+</body>
+</html>

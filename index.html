@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Monterey Mountain Bike Tours & Rentals</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --forest: #1a3a2a;
+    --moss: #2d5a3d;
+    --sage: #5a8a6a;
+    --fern: #8ab89a;
+    --mist: #c8ddd0;
+    --cream: #f5f0e8;
+    --gold: #c8a84b;
+    --bark: #6b4c2a;
+    --white: #ffffff;
+    --dark: #0f1f17;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--forest);
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 4rem;
+    background: rgba(15,31,23,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(138,184,154,0.15);
+  }
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem; color: var(--cream);
+    letter-spacing: 0.5px;
+  }
+  .nav-logo span { color: var(--gold); }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a {
+    color: var(--mist); text-decoration: none;
+    font-size: 0.85rem; font-weight: 500; letter-spacing: 1.5px;
+    text-transform: uppercase;
+    transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-cta {
+    background: var(--gold); color: var(--dark) !important;
+    padding: 0.5rem 1.4rem; border-radius: 2px;
+    font-weight: 500 !important;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    height: 100vh; position: relative;
+    display: flex; align-items: center;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(135deg, rgba(15,31,23,0.85) 0%, rgba(26,58,42,0.6) 50%, rgba(45,90,61,0.4) 100%),
+      url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1600&q=80') center/cover no-repeat;
+  }
+  .hero-pattern {
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle at 20% 80%, rgba(200,168,75,0.08) 0%, transparent 50%),
+                      radial-gradient(circle at 80% 20%, rgba(90,138,106,0.1) 0%, transparent 50%);
+  }
+  .hero-content {
+    position: relative; z-index: 2;
+    padding: 0 4rem; max-width: 750px;
+    animation: heroIn 1.2s ease-out forwards;
+  }
+  @keyframes heroIn {
+    from { opacity: 0; transform: translateY(40px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .hero-eyebrow {
+    font-size: 0.75rem; letter-spacing: 4px; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 1.2rem;
+    display: flex; align-items: center; gap: 0.8rem;
+  }
+  .hero-eyebrow::before {
+    content: ''; display: block;
+    width: 40px; height: 1px; background: var(--gold);
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 6vw, 5.5rem);
+    line-height: 1.05; color: var(--white);
+    margin-bottom: 1.5rem;
+  }
+  .hero h1 em { color: var(--fern); font-style: italic; }
+  .hero p {
+    font-size: 1.1rem; color: var(--mist); line-height: 1.8;
+    margin-bottom: 2.5rem; max-width: 520px; font-weight: 300;
+  }
+  .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--gold); color: var(--dark);
+    padding: 0.9rem 2.2rem; border-radius: 2px;
+    font-weight: 500; font-size: 0.9rem;
+    letter-spacing: 1px; text-transform: uppercase;
+    text-decoration: none;
+    transition: background 0.3s, transform 0.2s;
+    display: inline-block;
+  }
+  .btn-primary:hover { background: #d4b55a; transform: translateY(-2px); }
+  .btn-outline {
+    border: 1px solid rgba(200,221,208,0.5); color: var(--mist);
+    padding: 0.9rem 2.2rem; border-radius: 2px;
+    font-weight: 500; font-size: 0.9rem;
+    letter-spacing: 1px; text-transform: uppercase;
+    text-decoration: none;
+    transition: border-color 0.3s, color 0.3s, transform 0.2s;
+    display: inline-block;
+  }
+  .btn-outline:hover { border-color: var(--fern); color: var(--fern); transform: translateY(-2px); }
+  .hero-scroll {
+    position: absolute; bottom: 2.5rem; left: 50%;
+    transform: translateX(-50%);
+    color: var(--mist); font-size: 0.75rem; letter-spacing: 2px;
+    text-transform: uppercase; text-align: center;
+    animation: pulse 2s infinite;
+  }
+  .hero-scroll::after {
+    content: ''; display: block; width: 1px; height: 50px;
+    background: linear-gradient(to bottom, var(--mist), transparent);
+    margin: 0.6rem auto 0;
+  }
+  @keyframes pulse { 0%,100% { opacity: 0.6 } 50% { opacity: 1 } }
+
+  /* ── STATS BAR ── */
+  .stats-bar {
+    background: var(--forest);
+    display: grid; grid-template-columns: repeat(4, 1fr);
+  }
+  .stat {
+    padding: 2rem; text-align: center;
+    border-right: 1px solid rgba(138,184,154,0.15);
+  }
+  .stat:last-child { border-right: none; }
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem; color: var(--gold);
+    display: block; margin-bottom: 0.3rem;
+  }
+  .stat-label { font-size: 0.75rem; color: var(--fern); letter-spacing: 2px; text-transform: uppercase; }
+
+  /* ── SECTIONS COMMON ── */
+  section { padding: 6rem 4rem; }
+  .section-tag {
+    font-size: 0.7rem; letter-spacing: 4px; text-transform: uppercase;
+    color: var(--sage); margin-bottom: 0.8rem;
+    display: flex; align-items: center; gap: 0.6rem;
+  }
+  .section-tag::before { content:''; display:block; width:25px; height:1px; background:var(--sage); }
+  h2.section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    color: var(--forest); line-height: 1.2;
+    margin-bottom: 1rem;
+  }
+  .section-sub { color: var(--sage); font-size: 1rem; line-height: 1.7; max-width: 560px; font-weight: 300; }
+
+  /* ── SERVICES ── */
+  #services { background: var(--cream); }
+  .services-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 2px; margin-top: 3.5rem;
+    background: var(--mist);
+  }
+  .service-card {
+    background: var(--white); padding: 2.8rem 2.5rem;
+    position: relative; overflow: hidden;
+    transition: transform 0.3s;
+  }
+  .service-card:hover { transform: translateY(-6px); z-index: 2; }
+  .service-card::before {
+    content: ''; position: absolute; top: 0; left: 0;
+    width: 3px; height: 0;
+    background: var(--gold);
+    transition: height 0.4s;
+  }
+  .service-card:hover::before { height: 100%; }
+  .service-icon {
+    font-size: 2.5rem; margin-bottom: 1.5rem; display: block;
+  }
+  .service-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem; color: var(--forest);
+    margin-bottom: 0.8rem;
+  }
+  .service-card p { color: var(--sage); font-size: 0.95rem; line-height: 1.7; font-weight: 300; }
+  .service-price {
+    margin-top: 1.5rem; padding-top: 1.2rem;
+    border-top: 1px solid var(--mist);
+    display: flex; align-items: baseline; gap: 0.3rem;
+  }
+  .price-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem; color: var(--gold);
+  }
+  .price-unit { font-size: 0.8rem; color: var(--sage); }
+  .service-link {
+    display: inline-block; margin-top: 1.2rem;
+    color: var(--moss); font-size: 0.8rem; font-weight: 500;
+    letter-spacing: 1.5px; text-transform: uppercase; text-decoration: none;
+    transition: color 0.3s;
+  }
+  .service-link::after { content: ' →'; }
+  .service-link:hover { color: var(--gold); }
+
+  /* ── ABOUT ── */
+  #about {
+    background: var(--forest);
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 6rem; align-items: center;
+  }
+  .about-img-wrap {
+    position: relative; height: 550px;
+  }
+  .about-img-main {
+    width: 85%; height: 100%; object-fit: cover;
+    border-radius: 2px;
+    box-shadow: 20px 20px 60px rgba(0,0,0,0.4);
+  }
+  .about-img-accent {
+    position: absolute; bottom: -30px; right: 0;
+    width: 55%; height: 55%; object-fit: cover;
+    border: 6px solid var(--forest);
+    border-radius: 2px;
+    box-shadow: 10px 10px 30px rgba(0,0,0,0.4);
+  }
+  .about-badge {
+    position: absolute; top: 30px; right: 10%;
+    background: var(--gold);
+    width: 110px; height: 110px; border-radius: 50%;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+  }
+  .about-badge strong {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem; color: var(--dark); display: block; line-height: 1;
+  }
+  .about-badge span { font-size: 0.65rem; color: var(--dark); letter-spacing: 1px; text-transform: uppercase; }
+  .about-text .section-tag { color: var(--fern); }
+  .about-text .section-tag::before { background: var(--fern); }
+  .about-text h2 { color: var(--white); }
+  .about-text p { color: var(--mist); font-size: 1rem; line-height: 1.8; font-weight: 300; margin-bottom: 1.2rem; }
+  .about-features { margin-top: 2rem; display: flex; flex-direction: column; gap: 0.8rem; }
+  .about-feature {
+    display: flex; align-items: center; gap: 0.8rem;
+    color: var(--fern); font-size: 0.9rem;
+  }
+  .about-feature::before {
+    content: '✓'; background: rgba(138,184,154,0.15);
+    width: 24px; height: 24px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.75rem; flex-shrink: 0;
+  }
+
+  /* ── GALLERY ── */
+  #gallery { background: var(--dark); padding-bottom: 0; }
+  #gallery .section-tag { color: var(--fern); }
+  #gallery .section-tag::before { background: var(--fern); }
+  #gallery h2 { color: var(--white); }
+  .gallery-grid {
+    margin-top: 3rem;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: 250px 250px;
+    gap: 4px;
+  }
+  .gallery-item {
+    overflow: hidden; position: relative; cursor: pointer;
+    background: var(--moss);
+  }
+  .gallery-item:first-child {
+    grid-column: span 2; grid-row: span 2;
+  }
+  .gallery-item img {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: transform 0.6s ease, filter 0.4s;
+    filter: brightness(0.85);
+  }
+  .gallery-item:hover img { transform: scale(1.07); filter: brightness(1); }
+  .gallery-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(15,31,23,0.7), transparent);
+    opacity: 0; transition: opacity 0.4s;
+    display: flex; align-items: flex-end; padding: 1.5rem;
+  }
+  .gallery-item:hover .gallery-overlay { opacity: 1; }
+  .gallery-overlay span { color: var(--cream); font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; }
+
+  /* ── CONTACT ── */
+  #contact {
+    background: var(--cream);
+    display: grid; grid-template-columns: 1fr 1.3fr;
+    gap: 5rem; align-items: start;
+  }
+  #contact h2 { color: var(--forest); }
+  .contact-info { padding-top: 1rem; }
+  .contact-item {
+    display: flex; gap: 1.2rem; align-items: flex-start;
+    margin-bottom: 2rem;
+  }
+  .contact-icon {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: var(--forest); color: var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; flex-shrink: 0;
+  }
+  .contact-item h4 { font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; color: var(--sage); margin-bottom: 0.3rem; }
+  .contact-item p { color: var(--forest); font-weight: 400; }
+  .contact-item a { color: var(--forest); text-decoration: none; }
+  .contact-item a:hover { color: var(--moss); }
+  .contact-form { background: var(--white); padding: 3rem; border-radius: 2px; box-shadow: 0 4px 30px rgba(26,58,42,0.08); }
+  .contact-form h3 { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--forest); margin-bottom: 1.8rem; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+  .form-group { margin-bottom: 1rem; }
+  .form-group label { display: block; font-size: 0.75rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--sage); margin-bottom: 0.5rem; }
+  .form-group input, .form-group select, .form-group textarea {
+    width: 100%; padding: 0.85rem 1rem;
+    border: 1px solid var(--mist); background: var(--cream);
+    color: var(--forest); font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem; border-radius: 2px;
+    transition: border-color 0.3s;
+    outline: none;
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--sage); }
+  .form-group textarea { resize: vertical; min-height: 120px; }
+  .form-submit {
+    width: 100%; padding: 1rem;
+    background: var(--forest); color: var(--cream);
+    border: none; border-radius: 2px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem; font-weight: 500;
+    letter-spacing: 2px; text-transform: uppercase;
+    cursor: pointer; transition: background 0.3s;
+    margin-top: 0.5rem;
+  }
+  .form-submit:hover { background: var(--moss); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--dark);
+    padding: 3rem 4rem;
+    display: flex; align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid rgba(138,184,154,0.1);
+  }
+  .footer-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem; color: var(--cream);
+  }
+  .footer-logo span { color: var(--gold); }
+  footer p { color: var(--sage); font-size: 0.8rem; }
+  .footer-links { display: flex; gap: 2rem; }
+  .footer-links a { color: var(--sage); text-decoration: none; font-size: 0.8rem; transition: color 0.3s; }
+  .footer-links a:hover { color: var(--fern); }
+
+  /* ── SCROLL ANIMATIONS ── */
+  .fade-up {
+    opacity: 0; transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 900px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    section { padding: 4rem 1.5rem; }
+    .hero-content { padding: 0 1.5rem; }
+    .stats-bar { grid-template-columns: repeat(2,1fr); }
+    .services-grid { grid-template-columns: 1fr; }
+    #about { grid-template-columns: 1fr; gap: 3rem; }
+    .about-img-wrap { height: 300px; }
+    .gallery-grid { grid-template-columns: repeat(2,1fr); grid-template-rows: auto; }
+    .gallery-item:first-child { grid-column: span 2; }
+    #contact { grid-template-columns: 1fr; gap: 2.5rem; }
+    .form-row { grid-template-columns: 1fr; }
+    footer { flex-direction: column; gap: 1rem; text-align: center; }
+    .footer-links { flex-wrap: wrap; justify-content: center; }
+  }
+</style>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>emailjs.init('7G2nWUeWmKdWQ95hM');</script>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Monterey <span>Mountain Bike</span></div>
+  <ul class="nav-links">
+    <li><a href="#services">Tours</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="#contact" class="nav-cta">Book Now</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-pattern"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Monterey, California</div>
+    <h1>Ride the <em>Wild</em><br>Coast of Monterey</h1>
+    <p>Expert-guided mountain bike tours and premium rentals along the stunning California coastline. Every trail tells a story.</p>
+    <div class="hero-btns">
+      <a href="#services" class="btn-primary">Explore Tours</a>
+      <a href="#contact" class="btn-outline">Book a Rental</a>
+    </div>
+  </div>
+  <div class="hero-scroll">Scroll</div>
+</section>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stat"><span class="stat-num">500+</span><span class="stat-label">Happy Riders</span></div>
+  <div class="stat"><span class="stat-num">15+</span><span class="stat-label">Trail Routes</span></div>
+  <div class="stat"><span class="stat-num">5★</span><span class="stat-label">Avg Rating</span></div>
+  <div class="stat"><span class="stat-num">100%</span><span class="stat-label">Safety Record</span></div>
+</div>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="fade-up">
+    <div class="section-tag">What We Offer</div>
+    <h2 class="section-title">Tours & Rentals</h2>
+    <p class="section-sub">From beginner-friendly coastal rides to challenging backcountry trails — we have an adventure for every skill level.</p>
+  </div>
+  <div class="services-grid fade-up">
+    <div class="service-card">
+      <span class="service-icon">🏔️</span>
+      <h3>Mountain Bike Tour</h3>
+      <p>Guided half-day and full-day mountain bike tours through Monterey's most scenic trails. Expert guides share local knowledge and history.</p>
+      <div class="service-price"><span class="price-num">$45</span><span class="price-unit">/ 4hrs</span></div>
+      <a href="#contact" class="service-link">Book Now</a>
+    </div>
+    <div class="service-card">
+      <span class="service-icon">🚵</span>
+      <h3>Coastal Trail Ride</h3>
+      <p>Experience the breathtaking Pacific coastline on a guided 2-hour ride with panoramic ocean views and wildlife spotting stops.</p>
+      <div class="service-price"><span class="price-num">$45</span><span class="price-unit">/ 4hrs</span></div>
+      <a href="#contact" class="service-link">Book Now</a>
+    </div>
+    <div class="service-card">
+      <span class="service-icon">👨‍👩‍👧</span>
+      <h3>Family Adventure Tour</h3>
+      <p>A family-friendly, easy-paced ride designed for all ages. Helmets and safety gear included. Kids love this one!</p>
+      <div class="service-price"><span class="price-num">$45</span><span class="price-unit">/ 4hrs</span></div>
+      <a href="#contact" class="service-link">Book Now</a>
+    </div>
+    <div class="service-card">
+      <span class="service-icon">⚡</span>
+      <h3>E-Bike Rental</h3>
+      <p>Top-of-the-line electric mountain bikes available by the hour or day. Tackle the hills with ease — perfect for all fitness levels.</p>
+      <div class="service-price"><span class="price-num">$55</span><span class="price-unit">/ 4hrs</span></div>
+      <a href="#contact" class="service-link">Rent Now</a>
+    </div>
+    <div class="service-card">
+      <span class="service-icon">🚲</span>
+      <h3>Standard Bike Rental</h3>
+      <p>High-quality mountain bikes, beach cruisers and trail bikes available for hourly or daily rental. Helmet always included.</p>
+      <div class="service-price"><span class="price-num">$45</span><span class="price-unit">/ 4hrs &nbsp;+$10/extra hr</span></div>
+      <a href="#contact" class="service-link">Rent Now</a>
+    </div>
+    <div class="service-card">
+      <span class="service-icon">🏢</span>
+      <h3>Group & Corporate</h3>
+      <p>Team building adventures for groups of 10–40. Custom routes, catering options and professional photography available.</p>
+      <div class="service-price"><span class="price-num">Custom</span><span class="price-unit">pricing</span></div>
+      <a href="#contact" class="service-link">Get a Quote</a>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-img-wrap fade-up">
+    <img class="about-img-main" src="https://images.unsplash.com/photo-1544191696-102dbdaeeaa0?w=800&q=80" alt="Mountain biking in Monterey"/>
+    <img class="about-img-accent" src="https://images.unsplash.com/photo-1571188654248-7a89213915f7?w=400&q=80" alt="Bike rental"/>
+    <div class="about-badge"><strong>7+</strong><span>Years of Adventure</span></div>
+  </div>
+  <div class="about-text fade-up">
+    <div class="section-tag">Our Story</div>
+    <h2 class="section-title" style="color:var(--white)">Born from a Love of<br><em style="color:var(--fern)">the Open Trail</em></h2>
+    <p>Monterey Mountain Bike Tours was founded by a lifelong cyclist with a passion for sharing the natural beauty of California's central coast. What started as weekend rides with friends grew into Monterey's most loved bike adventure company.</p>
+    <p>We take pride in our top-quality equipment, safety-first approach, and expert guides who know every corner of these incredible trails. Whether it's your first time on a mountain bike or you're a seasoned rider — we make every ride unforgettable.</p>
+    <div class="about-features">
+      <div class="about-feature">Top-of-the-line mountain bikes, constantly maintained</div>
+      <div class="about-feature">Certified guides with 5+ years of local trail experience</div>
+      <div class="about-feature">All safety gear included — helmets, gloves & more</div>
+      <div class="about-feature">Small groups for an intimate, personalized experience</div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery">
+  <div class="fade-up">
+    <div class="section-tag">The Experience</div>
+    <h2 class="section-title">Life on the Trail</h2>
+  </div>
+  <div class="gallery-grid fade-up">
+    <div class="gallery-item">
+      <img src="https://images.unsplash.com/photo-1527553867845-d84d80f84e5d?w=800&q=80" alt="Mountain biking trail"/>
+      <div class="gallery-overlay"><span>Coastal Trails</span></div>
+    </div>
+    <div class="gallery-item">
+      <img src="https://images.unsplash.com/photo-1541625602330-2277a4c46182?w=600&q=80" alt="Scenic mountain ride"/>
+      <div class="gallery-overlay"><span>Scenic Views</span></div>
+    </div>
+    <div class="gallery-item">
+      <img src="https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=600&q=80" alt="Bike rental"/>
+      <div class="gallery-overlay"><span>Premium Bikes</span></div>
+    </div>
+    <div class="gallery-item">
+      <img src="https://images.unsplash.com/photo-1517649763962-0c623066013b?w=600&q=80" alt="Group tour"/>
+      <div class="gallery-overlay"><span>Group Tours</span></div>
+    </div>
+    <div class="gallery-item">
+      <img src="https://images.unsplash.com/photo-1576858574144-9ae1ebcf5ae5?w=600&q=80" alt="Monterey coast"/>
+      <div class="gallery-overlay"><span>Monterey Coast</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-info fade-up">
+    <div class="section-tag">Get in Touch</div>
+    <h2 class="section-title">Ready to Ride?<br><em style="font-style:italic">Let's Go.</em></h2>
+    <p class="section-sub" style="margin-bottom:2.5rem">Book a tour or rental, ask a question, or just say hello. We're always happy to hear from fellow riders.</p>
+
+    <div class="contact-item">
+      <div class="contact-icon">📍</div>
+      <div>
+        <h4>Location</h4>
+        <p>775 Asilomar Ave, Pacific Grove,<br>CA 93950</p>
+      </div>
+    </div>
+    <div class="contact-item">
+      <div class="contact-icon">📞</div>
+      <div>
+        <h4>Phone</h4>
+        <p><a href="tel:+14084659826">(408) 465-9826</a></p>
+      </div>
+    </div>
+    <div class="contact-item">
+      <div class="contact-icon">✉️</div>
+      <div>
+        <h4>Email</h4>
+        <p><a href="/cdn-cgi/l/email-protection#10727b7c717c796478637177716250777d71797c3e737f7d"><span class="__cf_email__" data-cfemail="ddbfb6b1bcb1b4a9b5aebcbabcaf9dbab0bcb4b1f3beb2b0">[email&#160;protected]</span></a></p>
+      </div>
+    </div>
+    <div class="contact-item">
+      <div class="contact-icon">🕐</div>
+      <div>
+        <h4>Hours</h4>
+        <p>Daily: 8:00 AM – 8:00 PM</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="contact-form fade-up">
+    <h3>Book Your Adventure</h3>
+    <div class="form-row">
+      <div class="form-group">
+        <label>First Name</label>
+        <input type="text" placeholder="John"/>
+      </div>
+      <div class="form-group">
+        <label>Last Name</label>
+        <input type="text" placeholder="Doe"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Email Address</label>
+      <input type="email" placeholder="john@example.com"/>
+    </div>
+    <div class="form-group">
+      <label>Phone Number</label>
+      <input type="tel" placeholder="+1 (555) 000-0000"/>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Service</label>
+        <select>
+          <option>Mountain Bike Tour</option>
+          <option>Coastal Trail Ride</option>
+          <option>Family Adventure Tour</option>
+          <option>E-Bike Rental</option>
+          <option>Standard Bike Rental</option>
+          <option>Group / Corporate</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Preferred Date</label>
+        <input type="date"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Message</label>
+      <textarea placeholder="Tell us about your group size, skill level, or any questions..."></textarea>
+    </div>
+    <button class="form-submit">Send Booking Request</button>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Monterey <span>Mountain Bike</span></div>
+  <p>© 2026 Monterey Mountain Bike Tours & Rentals. All rights reserved.</p>
+  <div class="footer-links">
+    <a href="#services">Tours</a>
+    <a href="#about">About</a>
+    <a href="#gallery">Gallery</a>
+    <a href="#contact">Contact</a>
+  </div>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  // Scroll animation
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 100);
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  // EmailJS Form Submit
+  document.addEventListener('DOMContentLoaded', function() {
+    emailjs.init("7G2nWUeWmKdWQ95hM");
+    var btn = document.querySelector('.form-submit');
+    if (!btn) return;
+    btn.addEventListener('click', function() {
+      var inputs = document.querySelectorAll('.form-group input');
+      var firstName = inputs[0] ? inputs[0].value.trim() : '';
+      var lastName  = inputs[1] ? inputs[1].value.trim() : '';
+      var email     = inputs[2] ? inputs[2].value.trim() : '';
+      var phone     = inputs[3] ? inputs[3].value.trim() : '';
+      var date      = inputs[4] ? inputs[4].value.trim() : '';
+      var selects   = document.querySelectorAll('.form-group select');
+      var service     = selects[0] ? selects[0].value : '';
+      var pickupTime  = selects[1] ? selects[1].value : '';
+      var dropoffTime = selects[2] ? selects[2].value : '';
+      var message = document.querySelector('.form-group textarea') ? document.querySelector('.form-group textarea').value.trim() : '';
+      if (!firstName || !email || !phone) { alert('Please fill in Name, Email and Phone!'); return; }
+      btn.textContent = 'Sending...';
+      btn.disabled = true;
+      btn.style.background = '#888';
+      var bookingData = {
+        name: firstName + ' ' + lastName,
+        email: email, phone: phone, service: service,
+        pickupTime: pickupTime, dropoffTime: dropoffTime,
+        date: date || 'Not specified', message: message || 'No message'
+      };
+      // Save to SheetDB (Google Sheets)
+      var sheetRow = {};
+      sheetRow['Date'] = new Date().toLocaleString();
+      sheetRow['Ride Date'] = date || 'Not specified';
+      sheetRow['Name'] = bookingData.name;
+      sheetRow['Email'] = bookingData.email;
+      sheetRow['Phone'] = bookingData.phone;
+      sheetRow['Service'] = bookingData.service;
+      sheetRow['Pickup Time'] = bookingData.pickupTime;
+      sheetRow['Dropoff Time'] = bookingData.dropoffTime;
+      sheetRow['Message'] = bookingData.message;
+      fetch('https://sheetdb.io/api/v1/5vp0mvc7l9ke9', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ data: [sheetRow], sheet: 'Sheet1' })
+      }).then(function(r){ return r.json(); })
+        .then(function(d){ console.log('Saved to sheet:', JSON.stringify(d)); })
+        .catch(function(err){ console.log('Sheet error:', err); });
+
+      emailjs.send("service_xvxdxyi", "template_r3rytzq", {
+        name: bookingData.name, email: email, phone: phone, service: service,
+        date: date + ' Pickup: ' + pickupTime + ' Dropoff: ' + dropoffTime,
+        message: message || 'No message'
+      }).then(function() {
+        btn.textContent = 'Booking Request Sent!';
+        btn.style.background = '#5a8a6a';
+        btn.disabled = false;
+      }, function(error) {
+        btn.textContent = 'Failed! Try Again';
+        btn.style.background = '#c0392b';
+        btn.disabled = false;
+      });
+    });
+  });
+</script>
+</body>
+</html>
