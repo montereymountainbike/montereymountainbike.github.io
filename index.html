@@ -437,14 +437,15 @@ footer p { color:#5a8a6a; font-size:0.8rem; }
         </label>
       </div>
     </div>
-    <div id="onlinePayDiv" style="display:block;">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;margin-bottom:1rem;">
-        <a id="payStandard" href="https://square.link/u/xPc393Xk" target="_blank" style="display:none;background:#c8a84b;color:#0f1f17;padding:0.9rem;border-radius:2px;text-align:center;text-decoration:none;font-size:0.85rem;font-weight:500;letter-spacing:1px;text-transform:uppercase;">🚲 Pay for Standard Bike</a>
-        <a id="payEbike" href="https://square.link/u/qjNNKiBC" target="_blank" style="display:none;background:#c8a84b;color:#0f1f17;padding:0.9rem;border-radius:2px;text-align:center;text-decoration:none;font-size:0.85rem;font-weight:500;letter-spacing:1px;text-transform:uppercase;">⚡ Pay for E-Bike</a>
-      </div>
-      <p style="font-size:0.75rem;color:#5a8a6a;text-align:center;margin-bottom:1rem;">🔒 Secure payment via Square — Visa, Mastercard, Amex, Apple Pay & Google Pay accepted</p>
-    </div>
     <button class="form-submit" id="submitBtn">Send Booking Request</button>
+    <div id="onlinePayDiv" style="display:none;margin-top:1.2rem;">
+      <p style="font-size:0.9rem;color:#1a3a2a;font-weight:500;margin-bottom:0.8rem;text-align:center;">✅ Booking request sent! Now complete your payment:</p>
+      <div style="display:flex;flex-direction:column;gap:0.8rem;">
+        <a id="payStandard" href="https://square.link/u/xPc393Xk" target="_blank" style="display:none;background:#c8a84b;color:#0f1f17;padding:1rem;border-radius:2px;text-align:center;text-decoration:none;font-size:0.95rem;font-weight:500;letter-spacing:1px;text-transform:uppercase;">🚲 Pay for Standard Bike — $45</a>
+        <a id="payEbike" href="https://square.link/u/qjNNKiBC" target="_blank" style="display:none;background:#c8a84b;color:#0f1f17;padding:1rem;border-radius:2px;text-align:center;text-decoration:none;font-size:0.95rem;font-weight:500;letter-spacing:1px;text-transform:uppercase;">⚡ Pay for E-Bike — $55</a>
+      </div>
+      <p style="font-size:0.75rem;color:#5a8a6a;text-align:center;margin-top:0.8rem;">🔒 Secure payment via Square — Visa, Mastercard, Amex, Apple Pay & Google Pay accepted</p>
+    </div>
   </div>
 </section>
 
@@ -468,26 +469,17 @@ function calcTotal() {
   var base = service === 'standard' ? 45 : service === 'ebike' ? 55 : 0;
   var total = base + (extra * 10);
   var box = document.getElementById('totalBox');
-  var ps = document.getElementById('payStandard');
-  var pe = document.getElementById('payEbike');
-  var payMethod = document.querySelector('input[name="payMethod"]:checked');
-  var isOnline = payMethod && payMethod.value === 'online';
   if (service) {
     box.style.display = 'block';
     document.getElementById('totalAmount').textContent = '$' + total;
     var bd = (service === 'standard' ? 'Standard Bike $45' : 'E-Bike $55');
     if (extra > 0) bd += ' + ' + extra + ' extra hr' + (extra > 1 ? 's' : '') + ' $' + (extra*10);
     document.getElementById('totalBreakdown').textContent = bd;
-    ps.style.display = (service === 'standard' && isOnline) ? 'block' : 'none';
-    pe.style.display = (service === 'ebike' && isOnline) ? 'block' : 'none';
   } else {
     box.style.display = 'none';
-    ps.style.display = 'none';
-    pe.style.display = 'none';
   }
 }
 function togglePay(val) {
-  document.getElementById('onlinePayDiv').style.display = val === 'online' ? 'block' : 'none';
   calcTotal();
 }
 document.addEventListener('DOMContentLoaded', function() {
@@ -513,7 +505,6 @@ document.addEventListener('DOMContentLoaded', function() {
     var total = base + (parseInt(eh) * 10);
     if (!fn || !em || !ph) { alert('Please fill in Name, Email and Phone!'); return; }
     if (!sv) { alert('Please select a rental (Standard Bike or E-Bike)!'); return; }
-    if (pm === 'online') { alert('Please click the payment button above (🚲 Pay for Standard Bike or ⚡ Pay for E-Bike) to complete your booking!'); return; }
     var btn = document.getElementById('submitBtn');
     btn.textContent = 'Sending...'; btn.disabled = true; btn.style.background = '#888';
     fetch('https://sheetdb.io/api/v1/5vp0mvc7l9ke9', {
@@ -528,6 +519,14 @@ document.addEventListener('DOMContentLoaded', function() {
     }).then(function(){
       btn.textContent = '✅ Booking Request Sent!';
       btn.style.background = '#2d5a3d';
+      if (pm === 'online') {
+        var payDiv = document.getElementById('onlinePayDiv');
+        var ps = document.getElementById('payStandard');
+        var pe = document.getElementById('payEbike');
+        payDiv.style.display = 'block';
+        ps.style.display = sv === 'standard' ? 'block' : 'none';
+        pe.style.display = sv === 'ebike' ? 'block' : 'none';
+      }
     }).catch(function(){
       btn.textContent = 'Send Booking Request';
       btn.disabled = false; btn.style.background = '';
