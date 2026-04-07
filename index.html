@@ -371,7 +371,7 @@ footer p { color:#5a8a6a; font-size:0.8rem; }
     </div>
     <div class="contact-item">
       <div class="contact-icon">✉️</div>
-      <div><h4>Email</h4><p><a href="mailto:montereymountainbike@gmail.com">montereymountainbike@gmail.com</a></p></div>
+      <div><h4>Email</h4><p><a href="/cdn-cgi/l/email-protection#92fffdfce6f7e0f7ebfffde7fce6f3fbfcf0fbf9f7d2f5fff3fbfebcf1fdff"><span class="__cf_email__" data-cfemail="701d1f1e04150215091d1f051e0411191e12191b1530171d11191c5e131f1d">[email&#160;protected]</span></a></p></div>
     </div>
     <div class="contact-item">
       <div class="contact-icon">🕐</div>
@@ -389,7 +389,7 @@ footer p { color:#5a8a6a; font-size:0.8rem; }
     <div class="form-row">
       <div class="form-group">
         <label>Select Rental</label>
-        <select id="serviceSelect" onchange="calcTotal()">
+        <select id="serviceSelect">
           <option value="">Select a service</option>
           <option value="standard">Standard Bike — $45 / 4hrs</option>
           <option value="ebike">E-Bike — $55 / 4hrs</option>
@@ -409,7 +409,7 @@ footer p { color:#5a8a6a; font-size:0.8rem; }
       </div>
       <div class="form-group">
         <label>Extra Hours (+ $10 each)</label>
-        <select id="extraHours" onchange="calcTotal()">
+        <select id="extraHours">
           <option value="0">No extra hours</option>
           <option value="1">+ 1 hour ($10)</option>
           <option value="2">+ 2 hours ($20)</option>
@@ -430,17 +430,17 @@ footer p { color:#5a8a6a; font-size:0.8rem; }
       <label style="display:block;font-size:0.75rem;letter-spacing:1.5px;text-transform:uppercase;color:#5a8a6a;margin-bottom:0.8rem;">Payment Method</label>
       <div style="display:flex;gap:0.8rem;flex-wrap:wrap;">
         <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer;color:#1a3a2a;font-size:0.9rem;">
-          <input type="radio" name="payMethod" value="online" checked onchange="togglePay(this.value)"> 💳 Pay Online Now
+          <input type="radio" name="payMethod" value="online" checked> 💳 Pay Online Now
         </label>
         <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer;color:#1a3a2a;font-size:0.9rem;">
-          <input type="radio" name="payMethod" value="inperson" onchange="togglePay(this.value)"> 💵 Pay In Person
+          <input type="radio" name="payMethod" value="inperson"> 💵 Pay In Person
         </label>
       </div>
     </div>
     <div id="onlinePayDiv">
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;margin-bottom:1rem;">
-        <a id="payStandard" href="https://square.link/u/cNwfKOJ1" target="_blank" style="display:none;background:#c8a84b;color:#0f1f17;padding:0.9rem;border-radius:2px;text-align:center;text-decoration:none;font-size:0.85rem;font-weight:500;letter-spacing:1px;text-transform:uppercase;">🚲 Pay for Standard Bike</a>
-        <a id="payEbike" href="https://checkout.square.site/merchant/MLAXV1PDR1V11/checkout/SOPN34IP2KTRSRDNY6S2EXQ3" target="_blank" style="display:none;background:#c8a84b;color:#0f1f17;padding:0.9rem;border-radius:2px;text-align:center;text-decoration:none;font-size:0.85rem;font-weight:500;letter-spacing:1px;text-transform:uppercase;">⚡ Pay for E-Bike</a>
+        <a id="payStandard" href="https://checkout.square.site/merchant/MLAXV1PDR1V11/checkout/SOPN34IP2KTRSRDNY6S2EXQ3" target="_blank" style="display:none;background:#c8a84b;color:#0f1f17;padding:0.9rem;border-radius:2px;text-align:center;text-decoration:none;font-size:0.85rem;font-weight:500;letter-spacing:1px;text-transform:uppercase;">🚲 Pay for Standard Bike</a>
+        <a id="payEbike" href="https://square.link/u/cNwfKOJ1" target="_blank" style="display:none;background:#c8a84b;color:#0f1f17;padding:0.9rem;border-radius:2px;text-align:center;text-decoration:none;font-size:0.85rem;font-weight:500;letter-spacing:1px;text-transform:uppercase;">⚡ Pay for E-Bike</a>
       </div>
       <p style="font-size:0.75rem;color:#5a8a6a;text-align:center;margin-bottom:1rem;">🔒 Secure payment via Square — Visa, Mastercard, Amex, Apple Pay & Google Pay accepted</p>
     </div>
@@ -461,7 +461,7 @@ footer p { color:#5a8a6a; font-size:0.8rem; }
   </div>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 function calcTotal() {
   var service = document.getElementById('serviceSelect').value;
   var extra = parseInt(document.getElementById('extraHours').value) || 0;
@@ -470,14 +470,16 @@ function calcTotal() {
   var box = document.getElementById('totalBox');
   var ps = document.getElementById('payStandard');
   var pe = document.getElementById('payEbike');
+  var payMethod = document.querySelector('input[name="payMethod"]:checked');
+  var isOnline = payMethod && payMethod.value === 'online';
   if (service) {
     box.style.display = 'block';
     document.getElementById('totalAmount').textContent = '$' + total;
     var bd = (service === 'standard' ? 'Standard Bike $45' : 'E-Bike $55');
     if (extra > 0) bd += ' + ' + extra + ' extra hr' + (extra > 1 ? 's' : '') + ' $' + (extra*10);
     document.getElementById('totalBreakdown').textContent = bd;
-    ps.style.display = service === 'standard' ? 'block' : 'none';
-    pe.style.display = service === 'ebike' ? 'block' : 'none';
+    ps.style.display = (service === 'standard' && isOnline) ? 'block' : 'none';
+    pe.style.display = (service === 'ebike' && isOnline) ? 'block' : 'none';
   } else {
     box.style.display = 'none';
     ps.style.display = 'none';
@@ -486,8 +488,14 @@ function calcTotal() {
 }
 function togglePay(val) {
   document.getElementById('onlinePayDiv').style.display = val === 'online' ? 'block' : 'none';
+  calcTotal();
 }
 document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('serviceSelect').addEventListener('change', calcTotal);
+  document.getElementById('extraHours').addEventListener('change', calcTotal);
+  document.querySelectorAll('input[name="payMethod"]').forEach(function(r) {
+    r.addEventListener('change', function() { togglePay(this.value); });
+  });
   emailjs.init('7G2nWUeWmKdWQ95hM');
   document.getElementById('submitBtn').addEventListener('click', function() {
     var fn = document.getElementById('firstName').value.trim();
@@ -516,14 +524,4 @@ document.addEventListener('DOMContentLoaded', function() {
       message:mg||'No message'
     }).then(function(){
       btn.textContent = '✅ Booking Request Sent!';
-      btn.style.background = '#2d5a3d';
-    }).catch(function(){
-      btn.textContent = 'Send Booking Request';
-      btn.disabled = false; btn.style.background = '';
-      alert('Error sending. Please call us at (408) 465-9826');
-    });
-  });
-});
-</script>
-</body>
-</html>
+      btn.
