@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>MMB Bookings</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --kelp:#1a3a2a; --kelp-2:#24503a; --gold:#c8a84b; --fog:#eef1ee; --paper:#ffffff;
+  --ink:#17231d; --muted:#5f6f66; --line:#d9e0da; --sea:#2f7d6d; --ember:#c7682c;
+  --busy:#e7c877; --free:#dfeae3;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:inherit}
+html,body{margin:0}
+body{font-family:'Barlow',system-ui,-apple-system,'Segoe UI',sans-serif;background:var(--fog);color:var(--ink);font-size:16px;line-height:1.45}
+button{font:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+
+/* Login */
+#login{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:var(--kelp)}
+.login-box{width:100%;max-width:340px;color:#fff}
+.brand{font-family:'Playfair Display',Georgia,serif;font-size:28px;margin:0 0 4px}
+.brand span{color:var(--gold)}
+.login-box p{margin:0 0 24px;color:#b9cfc2}
+.login-box input{width:100%;padding:14px 16px;border-radius:10px;border:2px solid transparent;font:inherit;font-size:18px;margin-bottom:12px}
+.login-box input:focus{border-color:var(--gold);outline:none}
+.login-box button{width:100%;padding:14px;border:0;border-radius:10px;background:var(--gold);color:var(--kelp);font-weight:700;font-size:17px}
+#loginErr{color:#ffb4a0;min-height:22px;margin-top:10px;font-size:15px}
+
+/* Top bar */
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--kelp);color:#fff;padding:12px 16px;display:flex;align-items:center;gap:12px}
+header .brand{font-size:21px;margin:0;flex:1}
+header small{display:block;font-family:'Barlow',sans-serif;font-size:12px;color:#b9cfc2;font-weight:400}
+.hbtn{border:1px solid #4d7a62;background:transparent;color:#fff;border-radius:8px;padding:8px 12px;font-size:14px}
+.hbtn.primary{background:var(--gold);border-color:var(--gold);color:var(--kelp);font-weight:700}
+
+main{max-width:760px;margin:0 auto;padding:16px 14px 48px}
+
+/* Day picker */
+.daybar{display:flex;align-items:center;gap:8px;margin-bottom:14px}
+.daybar button.arrow{width:44px;height:44px;border-radius:10px;border:1px solid var(--line);background:var(--paper);font-size:20px}
+.daylabel{flex:1;text-align:center}
+.daylabel strong{display:block;font-size:22px;font-weight:700;line-height:1.1}
+.daylabel span{color:var(--muted);font-size:14px}
+.todaylink{border:0;background:none;color:var(--sea);text-decoration:underline;font-size:14px;padding:4px}
+
+/* The hour strip: bikes out per hour */
+.strip-wrap{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:14px 14px 10px;margin-bottom:18px}
+.strip-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;gap:8px;flex-wrap:wrap}
+.strip-head h2{font-size:17px;margin:0}
+.strip-head .sum{color:var(--muted);font-size:14px}
+.strip{display:grid;grid-template-columns:repeat(12,1fr);gap:4px;align-items:end;height:92px}
+.hour{display:flex;flex-direction:column;justify-content:flex-end;height:100%}
+.bar{border-radius:5px 5px 2px 2px;background:var(--free);min-height:8px;display:flex;align-items:flex-start;justify-content:center;font-size:12px;font-weight:700;color:var(--kelp);padding-top:2px;transition:height .25s}
+.bar.on{background:var(--busy)}
+.bar.peak{background:var(--ember);color:#fff}
+.hlabels{display:grid;grid-template-columns:repeat(12,1fr);gap:4px;margin-top:4px}
+.hlabels div{text-align:center;font-size:11px;color:var(--muted)}
+.legend{display:flex;gap:14px;margin-top:10px;font-size:13px;color:var(--muted);flex-wrap:wrap}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-1px;margin-right:5px}
+
+/* Tabs */
+.tabs{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto}
+.tab{border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:8px 14px;font-size:15px;white-space:nowrap;color:var(--ink)}
+.tab[aria-selected="true"]{background:var(--kelp);border-color:var(--kelp);color:#fff}
+.tab b{font-weight:700;margin-left:4px}
+
+.search{width:100%;padding:11px 14px;border-radius:10px;border:1px solid var(--line);font:inherit;margin-bottom:14px;background:var(--paper)}
+
+/* Booking rows */
+.list{display:flex;flex-direction:column;gap:10px}
+.bk{background:var(--paper);border:1px solid var(--line);border-left:5px solid var(--sea);border-radius:12px;padding:14px 14px 12px}
+.bk.ebike{border-left-color:var(--gold)}
+.bk.past{opacity:.72}
+.bk-top{display:flex;gap:12px;align-items:flex-start}
+.time{min-width:84px}
+.time strong{display:block;font-size:20px;line-height:1.1}
+.time span{font-size:13px;color:var(--muted)}
+.who{flex:1;min-width:0}
+.who h3{margin:0;font-size:18px;overflow-wrap:anywhere}
+.who .svc{color:var(--muted);font-size:14px}
+.date-pill{font-size:13px;background:var(--fog);border-radius:6px;padding:3px 8px;white-space:nowrap}
+.msg{margin:10px 0 0;padding:8px 10px;background:var(--fog);border-radius:8px;font-size:14px;white-space:pre-wrap;overflow-wrap:anywhere}
+.contact{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.contact a{flex:1;min-width:88px;text-align:center;text-decoration:none;padding:10px 8px;border-radius:9px;font-weight:600;font-size:15px}
+.c-call{background:var(--kelp);color:#fff}
+.c-wa{background:#1f8f55;color:#fff}
+.c-mail{background:var(--fog);color:var(--kelp);border:1px solid var(--line)}
+.meta{font-size:12px;color:var(--muted);margin-top:8px}
+
+.empty{text-align:center;padding:32px 16px;color:var(--muted);background:var(--paper);border:1px dashed var(--line);border-radius:12px}
+.notice{padding:12px 14px;border-radius:10px;background:#fbe9e2;color:#7a2e12;margin-bottom:14px;font-size:15px}
+@media (prefers-reduced-motion:reduce){.bar{transition:none}}
+</style>
+</head>
+<body>
+
+<div id="login">
+  <form class="login-box" id="loginForm" onsubmit="return false">
+    <h1 class="brand">Monterey <span>Mountain Bike</span></h1>
+    <p>Bookings dashboard</p>
+    <label for="pw" style="position:absolute;left:-9999px">Password</label>
+    <input type="password" id="pw" placeholder="Password" autocomplete="current-password">
+    <button type="submit" id="loginBtn">Open bookings</button>
+    <div id="loginErr" role="alert"></div>
+  </form>
+</div>
+
+<div id="app" hidden>
+  <header>
+    <h1 class="brand">MMB Bookings<small id="updated">Loading…</small></h1>
+    <button class="hbtn primary" id="refreshBtn">Refresh</button>
+    <button class="hbtn" id="logoutBtn">Log out</button>
+  </header>
+
+  <main>
+    <div id="notice"></div>
+
+    <div class="daybar">
+      <button class="arrow" id="prevDay" aria-label="Previous day">‹</button>
+      <div class="daylabel"><strong id="dayTitle">Today</strong><span id="daySub"></span></div>
+      <button class="arrow" id="nextDay" aria-label="Next day">›</button>
+    </div>
+    <div style="text-align:center;margin:-8px 0 12px"><button class="todaylink" id="goToday" hidden>Back to today</button></div>
+
+    <section class="strip-wrap" aria-label="Bikes out per hour">
+      <div class="strip-head">
+        <h2>Bikes out by hour</h2>
+        <span class="sum" id="stripSum"></span>
+      </div>
+      <div class="strip" id="strip"></div>
+      <div class="hlabels" id="hlabels"></div>
+      <div class="legend">
+        <span><i style="background:var(--free)"></i>Free</span>
+        <span><i style="background:var(--busy)"></i>Bikes out</span>
+        <span><i style="background:var(--ember)"></i>Busiest hour</span>
+      </div>
+    </section>
+
+    <div class="tabs" role="tablist" id="tabs">
+      <button class="tab" role="tab" data-tab="day" aria-selected="true">This day<b id="nDay">0</b></button>
+      <button class="tab" role="tab" data-tab="upcoming" aria-selected="false">Upcoming<b id="nUp">0</b></button>
+      <button class="tab" role="tab" data-tab="past" aria-selected="false">Past<b id="nPast">0</b></button>
+      <button class="tab" role="tab" data-tab="all" aria-selected="false">All<b id="nAll">0</b></button>
+    </div>
+
+    <input class="search" id="search" type="search" placeholder="Search name, phone or email">
+
+    <div class="list" id="list"></div>
+  </main>
+</div>
+
+<script>
+var API = 'https://sheetdb.io/api/v1/5vp0mvc7l9ke9?sheet=Sheet1';
+var PASS_HASH = '1fccf549adceed3c9e1bdff9353bfdbe1ec8aa58a80ce4f6845ba212cb2b7adc';
+var OPEN = 8, CLOSE = 20; // 8 AM to 8 PM
+
+var bookings = [], viewDay = startOfDay(new Date()), tab = 'day', lastLoad = 0;
+
+/* ---------- Login ---------- */
+async function sha256(t){
+  var buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(t));
+  return Array.from(new Uint8Array(buf)).map(function(b){return b.toString(16).padStart(2,'0')}).join('');
+}
+function store(k,v){try{ v===null?localStorage.removeItem(k):localStorage.setItem(k,v) }catch(e){}}
+function read(k){try{ return localStorage.getItem(k) }catch(e){ return null }}
+
+document.getElementById('loginForm').addEventListener('submit', async function(){
+  var h = await sha256(document.getElementById('pw').value.trim());
+  if (h === PASS_HASH){ store('mmb_auth','1'); showApp(); }
+  else { document.getElementById('loginErr').textContent = 'Wrong password. Try again.'; }
+});
+document.getElementById('logoutBtn').onclick = function(){ store('mmb_auth',null); location.reload(); };
+
+function showApp(){
+  document.getElementById('login').hidden = true;
+  document.getElementById('login').style.display = 'none';
+  document.getElementById('app').hidden = false;
+  buildHourLabels();
+  loadData();
+}
+if (read('mmb_auth') === '1') showApp();
+
+/* ---------- Helpers for messy sheet values ---------- */
+function startOfDay(d){ var x = new Date(d); x.setHours(0,0,0,0); return x; }
+function sameDay(a,b){ return a && b && a.getTime() === b.getTime(); }
+function clean(v){ return (v === undefined || v === null) ? '' : String(v).trim(); }
+function blank(v){ v = clean(v); return !v || v === '-' || v.toLowerCase() === 'not specified'; }
+
+// Read a column even if the header has stray spaces or different capitals
+function pick(row, names){
+  var keys = Object.keys(row);
+  for (var i=0;i<names.length;i++){
+    var want = names[i].toLowerCase().replace(/\s+/g,'');
+    for (var j=0;j<keys.length;j++){
+      if (keys[j].toLowerCase().replace(/\s+/g,'') === want) return clean(row[keys[j]]);
+    }
+  }
+  return '';
+}
+
+function parseDate(v){
+  v = clean(v); if (!v || blank(v)) return null;
+  var m = v.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+  if (m) return new Date(+m[1], +m[2]-1, +m[3]);
+  m = v.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})/);
+  if (m){ var y = +m[3]; if (y < 100) y += 2000; return new Date(y, +m[1]-1, +m[2]); }
+  if (/^\d{5}(\.\d+)?$/.test(v)){ var d = new Date(Date.UTC(1899,11,30) + parseFloat(v)*86400000); return new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()); }
+  var t = new Date(v); return isNaN(t) ? null : startOfDay(t);
+}
+
+// Returns hour as a number like 13.5 (1:30 PM), or null
+function parseTime(v){
+  v = clean(v); if (!v || blank(v)) return null;
+  if (/^0?\.\d+$|^0$/.test(v)) return Math.round(parseFloat(v)*24*4)/4; // sheet stored a time as a fraction of a day
+  var m = v.match(/^(\d{1,2})(?::(\d{2}))?(?::\d{2})?\s*(am|pm)?$/i);
+  if (!m) return null;
+  var h = +m[1] % 12, min = +(m[2]||0), ap = (m[3]||'').toLowerCase();
+  if (ap === 'pm') h += 12;
+  if (!ap && +m[1] >= 12) h = +m[1];
+  return h + min/60;
+}
+function fmtTime(h){
+  if (h === null) return '—';
+  var hh = Math.floor(h), mm = Math.round((h-hh)*60), ap = hh >= 12 && hh < 24 ? 'PM' : 'AM';
+  var h12 = hh % 12 === 0 ? 12 : hh % 12;
+  return h12 + (mm ? ':' + String(mm).padStart(2,'0') : '') + ' ' + ap;
+}
+function fmtDay(d, long){
+  return d.toLocaleDateString('en-US', long ? {weekday:'long', month:'long', day:'numeric'} : {weekday:'short', month:'short', day:'numeric'});
+}
+function esc(s){ return String(s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+
+function normalize(row){
+  var vals = Object.keys(row).map(function(k){ return clean(row[k]); });
+  var b = {
+    booked:  pick(row, ['Booked on','Timestamp','Date booked']),
+    date:    parseDate(pick(row, ['Ride Date','Date','Preferred Date'])),
+    name:    pick(row, ['Name','Full Name','Customer']),
+    email:   pick(row, ['Email','Email Address']),
+    phone:   pick(row, ['Phone','Phone Number','Contact']),
+    service: pick(row, ['Service','Rental']),
+    pickup:  parseTime(pick(row, ['Pickup Time','Pickup'])),
+    dropoff: parseTime(pick(row, ['Dropoff Time','Drop off Time','Dropoff'])),
+    msg:     pick(row, ['Message','Notes'])
+  };
+  // Safety net: find email or phone even if they landed in the wrong column
+  if (!b.email.includes('@')){ var e = vals.find(function(x){ return /\S+@\S+\.\S+/.test(x); }); if (e) b.email = e; }
+  if ((b.phone.replace(/\D/g,'')).length < 7){ var p = vals.find(function(x){ return /^[+()\d\s.-]{7,}$/.test(x) && x.replace(/\D/g,'').length >= 10; }); if (p) b.phone = p; }
+  if (blank(b.msg)) b.msg = '';
+  if (b.pickup !== null && b.dropoff === null) b.dropoff = b.pickup + 4;
+  b.isEbike = /e-?bike/i.test(b.service);
+  if (blank(b.name)) b.name = b.email ? b.email.split('@')[0] : 'Name not given';
+  return b;
+}
+function hasContent(b){ return b.phone || b.email.includes('@') || b.date; }
+
+/* ---------- Load ---------- */
+async function loadData(){
+  var btn = document.getElementById('refreshBtn');
+  btn.textContent = 'Loading…'; btn.disabled = true;
+  document.getElementById('notice').innerHTML = '';
+  try{
+    var r = await fetch(API, {headers:{'Accept':'application/json'}});
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    var rows = await r.json();
+    if (!Array.isArray(rows)) throw new Error('Unexpected response');
+    bookings = rows.map(normalize).filter(hasContent);
+    lastLoad = Date.now();
+    document.getElementById('updated').textContent = 'Updated ' + new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
+    render();
+  }catch(err){
+    document.getElementById('notice').innerHTML = '<div class="notice">Could not load bookings (' + esc(err.message) + '). Check your internet connection, then tap Refresh. If it keeps failing, your SheetDB monthly limit may be used up — check sheetdb.io.</div>';
+  }
+  btn.textContent = 'Refresh'; btn.disabled = false;
+}
+document.getElementById('refreshBtn').onclick = loadData;
+// Reload when you come back to the app, at most every 5 minutes (saves SheetDB requests)
+document.addEventListener('visibilitychange', function(){
+  if (!document.hidden && !document.getElementById('app').hidden && Date.now() - lastLoad > 5*60*1000) loadData();
+});
+
+/* ---------- Render ---------- */
+function buildHourLabels(){
+  var html = '';
+  for (var h=OPEN; h<CLOSE; h++){ var l = h%12===0?12:h%12; html += '<div>' + l + (h<12?'a':'p') + '</div>'; }
+  document.getElementById('hlabels').innerHTML = html;
+}
+
+function renderStrip(dayList){
+  var counts = [], max = 0;
+  for (var h=OPEN; h<CLOSE; h++){
+    var c = dayList.filter(function(b){ return b.pickup !== null && b.pickup < h+1 && b.dropoff > h; }).length;
+    counts.push(c); if (c > max) max = c;
+  }
+  var html = '';
+  counts.forEach(function(c){
+    var hPct = c === 0 ? 10 : 25 + (c / Math.max(max,1)) * 75;
+    var cls = c === 0 ? '' : (c === max && max > 1 ? 'on peak' : 'on');
+    html += '<div class="hour"><div class="bar ' + cls + '" style="height:' + hPct + '%">' + (c || '') + '</div></div>';
+  });
+  document.getElementById('strip').innerHTML = html;
+  var std = dayList.filter(function(b){ return !b.isEbike; }).length, eb = dayList.length - std;
+  document.getElementById('stripSum').textContent = dayList.length
+    ? dayList.length + ' booking' + (dayList.length>1?'s':'') + ' (' + std + ' standard, ' + eb + ' e-bike)'
+    : 'No bookings — all hours free';
+}
+
+function card(b){
+  var today = startOfDay(new Date());
+  var past = b.date && b.date < today;
+  var digits = b.phone.replace(/\D/g,'');
+  var wa = digits.length === 10 ? '1' + digits : digits;
+  var html = '<article class="bk' + (b.isEbike?' ebike':'') + (past?' past':'') + '">';
+  html += '<div class="bk-top"><div class="time"><strong>' + fmtTime(b.pickup) + '</strong><span>until ' + fmtTime(b.dropoff) + '</span></div>';
+  html += '<div class="who"><h3>' + esc(b.name) + '</h3><div class="svc">' + (b.phone ? esc(b.phone) + '<br>' : '') + esc(b.service || 'Service not given') + '</div></div>';
+  if (tab !== 'day') html += '<span class="date-pill">' + (b.date ? fmtDay(b.date) : 'No date') + '</span>';
+  html += '</div>';
+  if (b.msg) html += '<p class="msg">' + esc(b.msg) + '</p>';
+  html += '<div class="contact">';
+  if (digits) html += '<a class="c-call" href="tel:' + esc(digits) + '">Call</a>';
+  if (digits) html += '<a class="c-wa" href="https://wa.me/' + esc(wa) + '" target="_blank" rel="noopener">WhatsApp</a>';
+  if (b.email.includes('@')) html += '<a class="c-mail" href="mailto:' + esc(b.email) + '">Email</a>';
+  html += '</div>';
+  if (b.booked) html += '<div class="meta">Booked ' + esc(b.booked) + (b.email ? ' by ' + esc(b.email) : '') + '</div>';
+  return html + '</article>';
+}
+
+function byDateTime(a,b){
+  var da = a.date ? a.date.getTime() : 9e15, db = b.date ? b.date.getTime() : 9e15;
+  return da - db || (a.pickup||0) - (b.pickup||0);
+}
+
+function render(){
+  var today = startOfDay(new Date());
+  var dayList = bookings.filter(function(b){ return sameDay(b.date, viewDay); }).sort(byDateTime);
+  var up = bookings.filter(function(b){ return b.date && b.date >= today; }).sort(byDateTime);
+  var past = bookings.filter(function(b){ return b.date && b.date < today; }).sort(byDateTime).reverse();
+  var all = bookings.slice().sort(byDateTime);
+
+  var diff = Math.round((viewDay - today) / 86400000);
+  document.getElementById('dayTitle').textContent = diff === 0 ? 'Today' : diff === 1 ? 'Tomorrow' : diff === -1 ? 'Yesterday' : fmtDay(viewDay);
+  document.getElementById('daySub').textContent = fmtDay(viewDay, true);
+  document.getElementById('goToday').hidden = diff === 0;
+
+  document.getElementById('nDay').textContent = dayList.length;
+  document.getElementById('nUp').textContent = up.length;
+  document.getElementById('nPast').textContent = past.length;
+  document.getElementById('nAll').textContent = all.length;
+
+  renderStrip(dayList);
+
+  var list = {day:dayList, upcoming:up, past:past, all:all}[tab];
+  var q = document.getElementById('search').value.trim().toLowerCase();
+  if (q) list = list.filter(function(b){ return (b.name + ' ' + b.phone + ' ' + b.email).toLowerCase().includes(q); });
+
+  var emptyText = {
+    day: 'No bookings for this day. Use the arrows to check other days.',
+    upcoming: 'No upcoming bookings yet. New ones appear here after customers book on your website.',
+    past: 'No past bookings.',
+    all: 'No bookings in your sheet yet. Make a test booking on your website, then tap Refresh.'
+  }[tab];
+  document.getElementById('list').innerHTML = list.length ? list.map(card).join('') : '<div class="empty">' + (q ? 'No bookings match “' + esc(q) + '”.' : emptyText) + '</div>';
+}
+
+document.getElementById('prevDay').onclick = function(){ viewDay.setDate(viewDay.getDate()-1); tab='day'; setTab(); render(); };
+document.getElementById('nextDay').onclick = function(){ viewDay.setDate(viewDay.getDate()+1); tab='day'; setTab(); render(); };
+document.getElementById('goToday').onclick = function(){ viewDay = startOfDay(new Date()); tab='day'; setTab(); render(); };
+document.getElementById('search').addEventListener('input', render);
+function setTab(){ document.querySelectorAll('.tab').forEach(function(t){ t.setAttribute('aria-selected', t.dataset.tab === tab); }); }
+document.getElementById('tabs').addEventListener('click', function(e){
+  var t = e.target.closest('.tab'); if (!t) return; tab = t.dataset.tab; setTab(); render();
+});
+</script>
+</body>
+</html>
