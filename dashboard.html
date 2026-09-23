@@ -6,92 +6,103 @@
 <title>MMB Dashboard</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f0f4f0;min-height:100vh;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f0ebe0;min-height:100vh;}
 
 /* LOGIN */
-#login-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:30px;background:#1a3a2a;}
-.login-logo{font-size:48px;margin-bottom:10px;}
-.login-title{color:#c8a84b;font-size:22px;font-weight:700;margin-bottom:4px;text-align:center;}
-.login-sub{color:#7a9e8a;font-size:13px;margin-bottom:32px;text-align:center;}
-.login-box{background:white;border-radius:16px;padding:24px;width:100%;max-width:340px;}
-.login-box label{font-size:12px;color:#888;text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:6px;}
-.login-box input{width:100%;padding:12px 16px;border:1.5px solid #e0e0e0;border-radius:10px;font-size:15px;margin-bottom:16px;outline:none;}
-.login-box input:focus{border-color:#1a3a2a;}
-.login-btn{width:100%;padding:14px;background:#1a3a2a;color:#c8a84b;border:none;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;letter-spacing:1px;}
-.login-err{color:#e74c3c;font-size:12px;text-align:center;margin-top:8px;display:none;}
+#login-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:30px;background:#3d2b1a;}
+.login-logo{font-size:52px;margin-bottom:8px;}
+.login-title{color:#c8a86a;font-size:22px;font-weight:700;margin-bottom:4px;text-align:center;letter-spacing:2px;}
+.login-sub{color:#a07850;font-size:13px;margin-bottom:32px;text-align:center;}
+.login-box{background:#faf6f0;border-radius:16px;padding:28px;width:100%;max-width:340px;}
+.login-box label{font-size:11px;color:#8b6340;text-transform:uppercase;letter-spacing:1.5px;display:block;margin-bottom:8px;font-weight:600;}
+.login-box input{width:100%;padding:13px 16px;border:1.5px solid #d4b896;border-radius:10px;font-size:15px;margin-bottom:18px;outline:none;background:#faf6f0;color:#3d2b1a;}
+.login-box input:focus{border-color:#8b6340;}
+.login-btn{width:100%;padding:14px;background:#3d2b1a;color:#c8a86a;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;letter-spacing:2px;}
+.login-err{color:#c0392b;font-size:12px;text-align:center;margin-top:10px;display:none;}
 
 /* DASHBOARD */
 #dashboard{display:none;}
-.topbar{background:#1a3a2a;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;}
-.topbar-title{color:white;font-size:16px;font-weight:600;}
-.topbar-right{display:flex;gap:8px;align-items:center;}
-.refresh-btn{background:#c8a84b;color:#1a3a2a;border:none;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;}
-.logout-btn{background:transparent;color:#7a9e8a;border:1px solid #7a9e8a;padding:6px 12px;border-radius:20px;font-size:12px;cursor:pointer;}
+.topbar{background:#3d2b1a;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;}
+.topbar-left{display:flex;flex-direction:column;}
+.topbar-title{color:#c8a86a;font-size:17px;font-weight:700;letter-spacing:1px;}
+.topbar-sub{color:#8b6340;font-size:10px;margin-top:2px;}
+.topbar-right{display:flex;gap:8px;}
+.refresh-btn{background:#c8a86a;color:#3d2b1a;border:none;padding:7px 16px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;}
+.logout-btn{background:transparent;color:#8b6340;border:1px solid #5a3d1e;padding:7px 12px;border-radius:20px;font-size:12px;cursor:pointer;}
 
 /* STATS */
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:12px;}
-.stat{background:white;border-radius:12px;padding:10px 6px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,0.07);}
-.stat .n{font-size:24px;font-weight:700;color:#1a3a2a;}
+.stat{background:white;border-radius:12px;padding:12px 6px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,0.08);border-bottom:3px solid #eee;}
+.stat .n{font-size:26px;font-weight:700;color:#3d2b1a;}
 .stat .l{font-size:9px;color:#999;text-transform:uppercase;letter-spacing:0.5px;margin-top:2px;}
-.stat.s-today .n{color:#e67e22;}
-.stat.s-tmr .n{color:#2e7d52;}
-.stat.s-week .n{color:#2980b9;}
+.stat.s-today{border-bottom-color:#e67e22;} .stat.s-today .n{color:#e67e22;}
+.stat.s-upcoming{border-bottom-color:#27ae60;} .stat.s-upcoming .n{color:#27ae60;}
+.stat.s-total{border-bottom-color:#c8a86a;} .stat.s-total .n{color:#c8a86a;}
 
 /* TABS */
 .tabs{display:flex;gap:6px;padding:0 12px 10px;overflow-x:auto;}
 .tabs::-webkit-scrollbar{display:none;}
-.tab{padding:7px 16px;border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;border:none;white-space:nowrap;background:#e8ede8;color:#555;flex-shrink:0;}
-.tab.active{background:#1a3a2a;color:#c8a84b;}
+.tab{padding:7px 16px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;border:none;white-space:nowrap;background:#e8e0d0;color:#8b6340;flex-shrink:0;}
+.tab.active{background:#3d2b1a;color:#c8a86a;}
 
 /* SECTION */
 .section{padding:0 12px 8px;}
-.sec-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#999;margin-bottom:8px;padding:4px 0;display:flex;align-items:center;gap:8px;}
-.sec-label .cnt{background:#1a3a2a;color:#c8a84b;border-radius:20px;padding:1px 8px;font-size:10px;}
-.sec-label .cnt.orange{background:#e67e22;color:white;}
-.sec-label .cnt.green{background:#2e7d52;color:white;}
-.sec-label .cnt.blue{background:#2980b9;color:white;}
-.sec-label .cnt.gray{background:#aaa;color:white;}
+.sec-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#b09070;margin-bottom:8px;padding:4px 0;display:flex;align-items:center;gap:8px;}
+.sec-label .cnt{border-radius:20px;padding:2px 9px;font-size:10px;font-weight:700;}
+.cnt-orange{background:#fde9d4;color:#e67e22;}
+.cnt-green{background:#d4f4e2;color:#27ae60;}
+.cnt-blue{background:#d4e8f4;color:#2980b9;}
+.cnt-gray{background:#eee;color:#999;}
+.cnt-gold{background:#fdf3dc;color:#c8a86a;}
 
-/* CARD */
-.card{background:white;border-radius:14px;padding:14px;margin-bottom:8px;box-shadow:0 1px 4px rgba(0,0,0,0.07);border-left:4px solid #ddd;position:relative;}
+/* BOOKING CARD */
+.card{background:white;border-radius:14px;padding:16px;margin-bottom:10px;box-shadow:0 2px 8px rgba(0,0,0,0.07);border-left:5px solid #ddd;}
 .card.c-today{border-left-color:#e67e22;}
-.card.c-tmr{border-left-color:#2e7d52;}
-.card.c-week{border-left-color:#2980b9;}
-.card.c-future{border-left-color:#8e44ad;}
-.card.c-past{border-left-color:#bbb;opacity:0.75;}
-.card.c-new{border-left-color:#c8a84b;}
+.card.c-tomorrow{border-left-color:#27ae60;}
+.card.c-upcoming{border-left-color:#2980b9;}
+.card.c-past{border-left-color:#ccc;opacity:0.75;}
+.card.c-new{border-left-color:#c8a86a;}
 
-.card-row1{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
-.cname{font-size:15px;font-weight:600;color:#1a3a2a;}
-.cdate-badge{font-size:10px;padding:3px 10px;border-radius:20px;font-weight:600;}
-.cdate-badge.today{background:#fff3e0;color:#e67e22;}
-.cdate-badge.tomorrow{background:#e8f5e9;color:#2e7d52;}
-.cdate-badge.week{background:#e3f2fd;color:#2980b9;}
-.cdate-badge.future{background:#f3e5f5;color:#8e44ad;}
-.cdate-badge.past{background:#f5f5f5;color:#999;}
-.cdate-badge.new{background:#fff8e8;color:#c8a84b;}
+/* Card header */
+.card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;}
+.customer-name{font-size:17px;font-weight:700;color:#3d2b1a;}
+.status-badge{font-size:10px;padding:4px 10px;border-radius:20px;font-weight:700;}
+.badge-today{background:#fde9d4;color:#e67e22;}
+.badge-tomorrow{background:#d4f4e2;color:#27ae60;}
+.badge-upcoming{background:#d4e8f4;color:#2980b9;}
+.badge-past{background:#eee;color:#999;}
+.badge-new{background:#fdf3dc;color:#c8a86a;}
 
-.card-row2{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:8px;}
-.ci{font-size:12px;color:#666;}
-.ci b{color:#1a3a2a;}
-.cservice{display:inline-block;background:#e8f0e4;color:#1a3a2a;font-size:11px;padding:3px 10px;border-radius:20px;font-weight:600;margin-bottom:4px;}
-.ctime{font-size:12px;color:#c8a84b;font-weight:600;}
-.cmsg{font-size:11px;color:#999;font-style:italic;margin-top:4px;}
+/* Detail rows */
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
+.detail-item{background:#faf6f0;border-radius:8px;padding:8px 10px;}
+.detail-label{font-size:9px;color:#b09070;text-transform:uppercase;letter-spacing:1px;font-weight:600;margin-bottom:2px;}
+.detail-value{font-size:13px;color:#3d2b1a;font-weight:600;}
+.detail-item.full{grid-column:1/-1;}
 
-.empty{text-align:center;padding:32px 20px;color:#bbb;}
-.empty-icon{font-size:36px;margin-bottom:8px;}
-.empty p{font-size:13px;}
+/* Timing strip -->
+.timing-strip{background:#3d2b1a;border-radius:10px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.timing-item{text-align:center;}
+.timing-label{font-size:9px;color:#8b6340;text-transform:uppercase;letter-spacing:1px;margin-bottom:3px;}
+.timing-value{font-size:14px;color:#c8a86a;font-weight:700;}
+.timing-arrow{color:#c8a86a;font-size:18px;}
 
-.loading{text-align:center;padding:50px 20px;}
-.spin{width:32px;height:32px;border:3px solid #e0e0e0;border-top-color:#1a3a2a;border-radius:50%;animation:spin 0.7s linear infinite;margin:0 auto 12px;}
+/* Message -->
+.message-box{background:#fdf8f0;border:1px solid #e8d8b8;border-radius:8px;padding:10px;font-size:12px;color:#8b6340;font-style:italic;line-height:1.5;}
+
+/* Action buttons -->
+.card-actions{display:flex;gap:8px;margin-top:10px;}
+.action-btn{flex:1;padding:8px;border-radius:8px;font-size:11px;font-weight:600;border:none;cursor:pointer;text-align:center;}
+.btn-call{background:#d4f4e2;color:#27ae60;}
+.btn-email{background:#fdf3dc;color:#c8a86a;}
+.btn-whatsapp{background:#d4f4e2;color:#128C7E;}
+
+.empty{text-align:center;padding:40px 20px;color:#c4a882;}
+.empty-icon{font-size:40px;margin-bottom:12px;}
+.loading{text-align:center;padding:50px;}
+.spin{width:32px;height:32px;border:3px solid #e8d8b8;border-top-color:#8b6340;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 12px;}
 @keyframes spin{to{transform:rotate(360deg);}}
-.updated{text-align:center;font-size:11px;color:#aaa;padding:8px;margin-bottom:60px;}
-
-/* BOTTOM NAV */
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:white;border-top:1px solid #eee;display:flex;padding:8px 0 12px;}
-.bnav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;border:none;background:transparent;cursor:pointer;font-size:9px;color:#aaa;font-weight:500;text-transform:uppercase;letter-spacing:0.5px;}
-.bnav-btn .icon{font-size:20px;}
-.bnav-btn.active{color:#1a3a2a;}
+.updated{text-align:center;font-size:10px;color:#c4a882;padding:8px;padding-bottom:80px;}
 </style>
 </head>
 <body>
@@ -99,31 +110,34 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <!-- LOGIN -->
 <div id="login-screen">
   <div class="login-logo">🚲</div>
-  <div class="login-title">Monterey Mountain Bike</div>
+  <div class="login-title">MONTEREY MOUNTAIN BIKE</div>
   <div class="login-sub">Bookings Dashboard</div>
   <div class="login-box">
     <label>Password</label>
-    <input type="password" id="pwd-input" placeholder="Enter password" onkeydown="if(event.key==='Enter')doLogin()"/>
-    <button class="login-btn" onclick="doLogin()">SIGN IN</button>
-    <div class="login-err" id="login-err">Wrong password. Try again.</div>
+    <input type="password" id="pwd" placeholder="Enter password" onkeydown="if(event.key==='Enter')login()"/>
+    <button class="login-btn" onclick="login()">SIGN IN</button>
+    <div class="login-err" id="err">Wrong password. Try again.</div>
   </div>
 </div>
 
 <!-- DASHBOARD -->
 <div id="dashboard">
   <div class="topbar">
-    <div class="topbar-title">🚲 Bookings</div>
+    <div class="topbar-left">
+      <div class="topbar-title">🚲 MMB Bookings</div>
+      <div class="topbar-sub" id="updated-time">Loading...</div>
+    </div>
     <div class="topbar-right">
-      <button class="refresh-btn" onclick="loadData()">↻</button>
-      <button class="logout-btn" onclick="doLogout()">Logout</button>
+      <button class="refresh-btn" onclick="loadData()">↻ Refresh</button>
+      <button class="logout-btn" onclick="logout()">Logout</button>
     </div>
   </div>
 
   <div class="stats">
     <div class="stat s-today"><div class="n" id="s1">-</div><div class="l">Today</div></div>
-    <div class="stat s-tmr"><div class="n" id="s2">-</div><div class="l">Tomorrow</div></div>
-    <div class="stat s-week"><div class="n" id="s3">-</div><div class="l">This Week</div></div>
-    <div class="stat"><div class="n" id="s4">-</div><div class="l">Total</div></div>
+    <div class="stat s-upcoming"><div class="n" id="s2">-</div><div class="l">Upcoming</div></div>
+    <div class="stat"><div class="n" id="s3">-</div><div class="l">This Week</div></div>
+    <div class="stat s-total"><div class="n" id="s4">-</div><div class="l">Total</div></div>
   </div>
 
   <div class="tabs">
@@ -131,89 +145,99 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <button class="tab" onclick="setTab('today',this)">Today</button>
     <button class="tab" onclick="setTab('tomorrow',this)">Tomorrow</button>
     <button class="tab" onclick="setTab('week',this)">This Week</button>
-    <button class="tab" onclick="setTab('future',this)">Future</button>
+    <button class="tab" onclick="setTab('upcoming',this)">Upcoming</button>
     <button class="tab" onclick="setTab('past',this)">Past</button>
   </div>
 
   <div id="content">
     <div class="loading"><div class="spin"></div>Loading bookings...</div>
   </div>
-  <div class="updated" id="updated-time"></div>
+  <div class="updated" id="updated"></div>
 </div>
 
 <script>
 const PASS = 'mmb2026';
-const API  = 'https://sheetdb.io/api/v1/5vp0mvc7l9ke9?sheet=Sheet1';
+const API = 'https://sheetdb.io/api/v1/5vp0mvc7l9ke9?sheet=Sheet1';
 let allData = [];
-let curTab  = 'all';
+let curTab = 'all';
 
-function doLogin() {
-  var p = document.getElementById('pwd-input').value;
-  if (p === PASS) {
+function login() {
+  if (document.getElementById('pwd').value === PASS) {
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('dashboard').style.display = 'block';
     loadData();
   } else {
-    document.getElementById('login-err').style.display = 'block';
-    document.getElementById('pwd-input').value = '';
+    document.getElementById('err').style.display = 'block';
+    document.getElementById('pwd').value = '';
   }
 }
 
-function doLogout() {
+function logout() {
   document.getElementById('login-screen').style.display = 'flex';
   document.getElementById('dashboard').style.display = 'none';
-  document.getElementById('pwd-input').value = '';
+  document.getElementById('pwd').value = '';
 }
 
-function parseRideDate(b) {
+function getRideDate(b) {
   var s = b['Ride Date'] || b['Booked on'] || '';
   if (!s || s === 'Not specified') return null;
   var d = new Date(s);
-  if (!isNaN(d)) return d;
+  if (!isNaN(d.getTime())) return d;
   var p = s.split('/');
-  if (p.length >= 3) return new Date(p[2].split(' ')[0], p[0]-1, p[1]);
+  if (p.length >= 3) return new Date(p[2].split(',')[0].trim(), p[0]-1, p[1]);
   return null;
 }
 
-function startOfDay(d) { var x=new Date(d); x.setHours(0,0,0,0); return x; }
+function sod(d) { var x = new Date(d); x.setHours(0,0,0,0); return x; }
 
 function classify(b) {
-  var d = parseRideDate(b);
+  var d = getRideDate(b);
   if (!d) return 'new';
-  var now = startOfDay(new Date());
-  var sd  = startOfDay(d);
-  var diff = Math.round((sd - now) / 86400000);
+  var now = sod(new Date());
+  var rd = sod(d);
+  var diff = Math.round((rd - now) / 86400000);
   if (diff === 0) return 'today';
   if (diff === 1) return 'tomorrow';
   if (diff > 1 && diff <= 7) return 'week';
-  if (diff > 7) return 'future';
+  if (diff > 7) return 'upcoming';
   return 'past';
 }
 
+function formatDate(b) {
+  var d = getRideDate(b);
+  if (!d) return 'Not set';
+  return d.toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric', year:'numeric'});
+}
+
 function loadData() {
-  document.getElementById('content').innerHTML = '<div class="loading"><div class="spin"></div>Loading...</div>';
+  document.getElementById('updated-time').textContent = 'Refreshing...';
   fetch(API)
     .then(r => r.json())
     .then(data => {
-      allData = Array.isArray(data) ? data : [];
+      allData = Array.isArray(data) ? data.reverse() : [];
+      updateStats();
       render(curTab);
-      document.getElementById('updated-time').textContent = 'Last updated: ' + new Date().toLocaleTimeString();
-      // stats
-      var counts = {today:0,tomorrow:0,week:0};
-      allData.forEach(b => {
-        var c = classify(b);
-        if (c==='today') counts.today++;
-        if (c==='tomorrow') counts.tomorrow++;
-        if (c==='week') counts.week++;
-      });
-      document.getElementById('s1').textContent = counts.today;
-      document.getElementById('s2').textContent = counts.tomorrow;
-      document.getElementById('s3').textContent = counts.week;
-      document.getElementById('s4').textContent = allData.length;
+      var now = new Date().toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit'});
+      document.getElementById('updated-time').textContent = 'Updated at ' + now;
+      document.getElementById('updated').textContent = 'Last refreshed: ' + now;
     })
     .catch(() => {
-      document.getElementById('content').innerHTML = '<div class="empty"><div class="empty-icon">⚠️</div><p>Could not load. Check connection.</p></div>';
+      document.getElementById('content').innerHTML = '<div class="empty"><div class="empty-icon">⚠️</div><p>Could not load bookings.<br>Check your connection.</p></div>';
     });
+}
+
+function updateStats() {
+  var today=0, upcoming=0, week=0;
+  allData.forEach(b => {
+    var c = classify(b);
+    if (c==='today') today++;
+    if (c==='tomorrow'||c==='upcoming'||c==='week') upcoming++;
+    if (c==='week') week++;
+  });
+  document.getElementById('s1').textContent = today;
+  document.getElementById('s2').textContent = upcoming;
+  document.getElementById('s3').textContent = week;
+  document.getElementById('s4').textContent = allData.length;
 }
 
 function setTab(tab, btn) {
@@ -224,80 +248,111 @@ function setTab(tab, btn) {
 }
 
 function render(tab) {
-  var groups = {today:[],tomorrow:[],week:[],future:[],past:[],new:[]};
-  allData.forEach(b => { var c=classify(b); groups[c].push(b); });
-
-  // sort each group by ride date
-  ['today','tomorrow','week','future'].forEach(g => {
-    groups[g].sort((a,b) => {
-      var da = parseRideDate(a), db = parseRideDate(b);
-      return (da||0) - (db||0);
-    });
-  });
+  var groups = {today:[], tomorrow:[], week:[], upcoming:[], past:[], new:[]};
+  allData.forEach(b => groups[classify(b)].push(b));
 
   var html = '';
 
-  function section(title, cls, cntCls, items, cardCls) {
+  function section(title, items, cardCls, cntCls) {
     if (!items.length) return '';
     var s = '<div class="section"><div class="sec-label">' + title + ' <span class="cnt ' + cntCls + '">' + items.length + '</span></div>';
-    items.forEach(b => s += card(b, cardCls));
+    items.forEach(b => s += buildCard(b, cardCls));
     return s + '</div>';
   }
 
-  if (tab==='all' || tab==='today')    html += section('Today',     'today',   'orange', groups.today,    'c-today');
-  if (tab==='all' || tab==='tomorrow') html += section('Tomorrow',  'tmr',     'green',  groups.tomorrow, 'c-tmr');
-  if (tab==='all' || tab==='week')     html += section('This Week', 'week',    'blue',   groups.week,     'c-week');
-  if (tab==='all' || tab==='future')   html += section('Future',    'future',  '',       groups.future,   'c-future');
-  if (tab==='all')                     html += section('New (no date set)', 'new', '', groups.new, 'c-new');
-  if (tab==='all' || tab==='past')     html += section('Past',      'past',    'gray',   groups.past,     'c-past');
+  if (tab==='all'||tab==='today')    html += section('Today',     groups.today,    'c-today',    'cnt-orange');
+  if (tab==='all'||tab==='tomorrow') html += section('Tomorrow',  groups.tomorrow, 'c-tomorrow', 'cnt-green');
+  if (tab==='all'||tab==='week')     html += section('This Week', groups.week,     'c-upcoming', 'cnt-blue');
+  if (tab==='all'||tab==='upcoming') html += section('Upcoming',  groups.upcoming, 'c-upcoming', 'cnt-blue');
+  if (tab==='all')                   html += section('New Bookings (No Date Set)', groups.new, 'c-new', 'cnt-gold');
+  if (tab==='all'||tab==='past')     html += section('Past',      groups.past,     'c-past',     'cnt-gray');
 
-  if (!html) html = '<div class="empty"><div class="empty-icon">📋</div><p>No bookings here</p></div>';
+  if (!html) html = '<div class="empty"><div class="empty-icon">📋</div><p>No bookings found</p></div>';
   document.getElementById('content').innerHTML = html;
 }
 
-function badgeCls(c) {
-  return {today:'today',tomorrow:'tomorrow',week:'week',future:'future',past:'past',new:'new'}[c]||'new';
-}
-function badgeText(b) {
-  var c = classify(b);
-  var d = parseRideDate(b);
-  if (c==='today')    return '🔥 Today';
-  if (c==='tomorrow') return '📅 Tomorrow';
-  if (c==='week')     return '📅 This Week';
-  if (c==='past')     return '✓ Past';
-  if (c==='new')      return '🆕 New';
-  if (d) return '📅 ' + d.toLocaleDateString('en-US',{month:'short',day:'numeric'});
-  return '📅 Future';
+function getBadge(c) {
+  var map = {
+    today:    ['badge-today',    '🔥 Today'],
+    tomorrow: ['badge-tomorrow', '📅 Tomorrow'],
+    week:     ['badge-upcoming', '📅 This Week'],
+    upcoming: ['badge-upcoming', '📅 Upcoming'],
+    past:     ['badge-past',     '✓ Completed'],
+    new:      ['badge-new',      '🆕 New']
+  };
+  return map[c] || ['badge-new', '🆕 New'];
 }
 
-function card(b, cls) {
-  var name    = b['Name']||b['name']||'Unknown';
-  var email   = b['Email']||b['email']||'-';
-  var phone   = b['Phone']||b['phone']||'-';
-  var service = b['Service']||b['service']||'-';
-  var pickup  = b['Pickup Time']||b['pickupTime']||'-';
-  var dropoff = b['Dropoff Time']||b['dropoffTime']||'-';
-  var msg     = b['Message']||b['message']||'';
-  var rideDate= b['Ride Date']||b['ride_date']||'-';
-  var bc      = badgeCls(classify(b));
+function buildCard(b, cls) {
+  var name     = b['Name']     || b['name']     || 'Unknown Customer';
+  var email    = b['Email']    || b['email']    || '-';
+  var phone    = b['Phone']    || b['phone']    || '-';
+  var service  = b['Service']  || b['service']  || '-';
+  var pickup   = b['Pickup Time']  || b['pickupTime']  || '-';
+  var dropoff  = b['Dropoff Time'] || b['dropoffTime'] || '-';
+  var msg      = b['Message']  || b['message']  || '';
+  var bookedOn = b['Booked on'] || b['Date'] || '-';
+  var rideDate = formatDate(b);
+  var c        = classify(b);
+  var badge    = getBadge(c);
+  var phoneClean = phone.replace(/\D/g, '');
 
   return '<div class="card ' + cls + '">' +
-    '<div class="card-row1">' +
-      '<div class="cname">' + name + '</div>' +
-      '<div class="cdate-badge ' + bc + '">' + badgeText(b) + '</div>' +
+
+    '<div class="card-header">' +
+      '<div class="customer-name">👤 ' + name + '</div>' +
+      '<span class="status-badge ' + badge[0] + '">' + badge[1] + '</span>' +
     '</div>' +
-    '<div class="card-row2">' +
-      '<div class="ci">📞 <b>' + phone + '</b></div>' +
-      '<div class="ci">✉️ <b style="font-size:10px">' + email + '</b></div>' +
+
+    '<div class="detail-grid">' +
+      '<div class="detail-item">' +
+        '<div class="detail-label">📞 Phone</div>' +
+        '<div class="detail-value">' + phone + '</div>' +
+      '</div>' +
+      '<div class="detail-item">' +
+        '<div class="detail-label">✉️ Email</div>' +
+        '<div class="detail-value" style="font-size:11px">' + email + '</div>' +
+      '</div>' +
+      '<div class="detail-item">' +
+        '<div class="detail-label">🚲 Service</div>' +
+        '<div class="detail-value">' + service + '</div>' +
+      '</div>' +
+      '<div class="detail-item">' +
+        '<div class="detail-label">📅 Ride Date</div>' +
+        '<div class="detail-value" style="font-size:12px">' + rideDate + '</div>' +
+      '</div>' +
+      '<div class="detail-item">' +
+        '<div class="detail-label">🗓️ Booked On</div>' +
+        '<div class="detail-value" style="font-size:11px">' + bookedOn + '</div>' +
+      '</div>' +
     '</div>' +
-    '<span class="cservice">' + service + '</span>' +
-    '<div class="ctime">🕐 ' + pickup + ' → ' + dropoff + '</div>' +
-    (msg ? '<div class="cmsg">"' + msg + '"</div>' : '') +
+
+    '<div class="timing-strip">' +
+      '<div class="timing-item">' +
+        '<div class="timing-label">Pickup Time</div>' +
+        '<div class="timing-value">🕐 ' + pickup + '</div>' +
+      '</div>' +
+      '<div class="timing-arrow">→</div>' +
+      '<div class="timing-item">' +
+        '<div class="timing-label">Dropoff Time</div>' +
+        '<div class="timing-value">🕐 ' + dropoff + '</div>' +
+      '</div>' +
+    '</div>' +
+
+    (msg && msg !== 'No message' ? '<div class="message-box">💬 "' + msg + '"</div>' : '') +
+
+    '<div class="card-actions">' +
+      '<a href="tel:' + phoneClean + '" class="action-btn btn-call">📞 Call</a>' +
+      '<a href="mailto:' + email + '" class="action-btn btn-email">✉️ Email</a>' +
+      '<a href="https://wa.me/1' + phoneClean + '" class="action-btn btn-whatsapp">💬 WhatsApp</a>' +
+    '</div>' +
+
   '</div>';
 }
 
-// auto-refresh every 2 mins
-setInterval(() => { if(document.getElementById('dashboard').style.display!=='none') loadData(); }, 120000);
+setInterval(() => {
+  if (document.getElementById('dashboard').style.display !== 'none') loadData();
+}, 120000);
 </script>
 </body>
 </html>
